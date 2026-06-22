@@ -1,521 +1,1003 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Vikram Aditya</title>
-<style>
-  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Inter:wght@300;400;500;600&display=swap');
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Vikram Aditya</title>
+        <style>
+            @import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Inter:wght@300;400;500;600&display=swap");
 
-  :root {
-    --bg: #0d0d0f;
-    --bg2: #111115;
-    --bg3: #16161b;
-    --border: rgba(255,255,255,0.07);
-    --border-hover: rgba(255,255,255,0.15);
-    --text: #e8e8f0;
-    --muted: #6b6b7e;
-    --accent: #7b61ff;
-    --accent2: #a78bfa;
-    --green: #22d3a2;
-    --mono: 'JetBrains Mono', monospace;
-    --sans: 'Inter', sans-serif;
-  }
+            :root {
+                --bg: #0d0d0f;
+                --bg2: #111115;
+                --bg3: #16161b;
+                --border: rgba(255, 255, 255, 0.07);
+                --border-hover: rgba(255, 255, 255, 0.15);
+                --text: #e8e8f0;
+                --muted: #6b6b7e;
+                --accent: #7b61ff;
+                --accent2: #a78bfa;
+                --green: #22d3a2;
+                --mono: "JetBrains Mono", monospace;
+                --sans: "Inter", sans-serif;
+            }
 
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+            *,
+            *::before,
+            *::after {
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+            }
+            html {
+                scroll-behavior: smooth;
+            }
 
-  html { scroll-behavior: smooth; }
+            body {
+                background: var(--bg);
+                color: var(--text);
+                font-family: var(--sans);
+                font-size: 15px;
+                line-height: 1.7;
+                min-height: 100vh;
+                overflow-x: hidden;
+            }
 
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: var(--sans);
-    font-size: 15px;
-    line-height: 1.7;
-    min-height: 100vh;
-    overflow-x: hidden;
-  }
+            #cursor-glow {
+                position: fixed;
+                width: 400px;
+                height: 400px;
+                border-radius: 50%;
+                background: radial-gradient(
+                    circle,
+                    rgba(123, 97, 255, 0.07) 0%,
+                    transparent 70%
+                );
+                pointer-events: none;
+                transform: translate(-50%, -50%);
+                transition: opacity 0.3s;
+                z-index: 0;
+            }
 
-  /* cursor glow */
-  #cursor-glow {
-    position: fixed;
-    width: 400px;
-    height: 400px;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(123,97,255,0.07) 0%, transparent 70%);
-    pointer-events: none;
-    transform: translate(-50%, -50%);
-    transition: opacity 0.3s;
-    z-index: 0;
-  }
+            body::before {
+                content: "";
+                position: fixed;
+                inset: 0;
+                background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+                opacity: 0.5;
+                pointer-events: none;
+                z-index: 1;
+            }
 
-  /* noise overlay */
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
-    opacity: 0.5;
-    pointer-events: none;
-    z-index: 1;
-  }
+            .container {
+                max-width: 780px;
+                margin: 0 auto;
+                padding: 0 2rem;
+                position: relative;
+                z-index: 2;
+            }
 
-  .container { max-width: 780px; margin: 0 auto; padding: 0 2rem; position: relative; z-index: 2; }
+            nav {
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                z-index: 100;
+                border-bottom: 1px solid var(--border);
+                background: rgba(13, 13, 15, 0.85);
+                backdrop-filter: blur(12px);
+                -webkit-backdrop-filter: blur(12px);
+            }
+            nav .inner {
+                max-width: 780px;
+                margin: 0 auto;
+                padding: 0 2rem;
+                height: 54px;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+            }
+            .nav-logo {
+                font-family: var(--mono);
+                font-size: 13px;
+                color: var(--accent2);
+                letter-spacing: 0.04em;
+            }
+            .nav-links {
+                display: flex;
+                gap: 1.5rem;
+            }
+            .nav-links a {
+                font-size: 13px;
+                color: var(--muted);
+                text-decoration: none;
+                transition: color 0.2s;
+                font-family: var(--mono);
+            }
+            .nav-links a:hover {
+                color: var(--text);
+            }
 
-  /* NAV */
-  nav {
-    position: fixed;
-    top: 0; left: 0; right: 0;
-    z-index: 100;
-    border-bottom: 1px solid var(--border);
-    background: rgba(13,13,15,0.85);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-  }
-  nav .inner {
-    max-width: 780px; margin: 0 auto; padding: 0 2rem;
-    height: 54px; display: flex; align-items: center; justify-content: space-between;
-  }
-  .nav-logo { font-family: var(--mono); font-size: 13px; color: var(--accent2); letter-spacing: 0.04em; }
-  .nav-links { display: flex; gap: 1.5rem; }
-  .nav-links a {
-    font-size: 13px; color: var(--muted); text-decoration: none;
-    transition: color 0.2s; font-family: var(--mono);
-  }
-  .nav-links a:hover { color: var(--text); }
+            .hero {
+                padding: 9rem 0 5rem;
+                border-bottom: 1px solid var(--border);
+            }
+            .hero-eyebrow {
+                font-family: var(--mono);
+                font-size: 12px;
+                color: var(--green);
+                letter-spacing: 0.1em;
+                margin-bottom: 1.25rem;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+            }
+            .hero-eyebrow::before {
+                content: "";
+                width: 24px;
+                height: 1px;
+                background: var(--green);
+            }
+            .hero h1 {
+                font-family: var(--mono);
+                font-size: clamp(2rem, 6vw, 3.5rem);
+                font-weight: 700;
+                letter-spacing: -0.02em;
+                line-height: 1.1;
+                margin-bottom: 0.75rem;
+            }
+            .hero h1 span {
+                color: var(--accent2);
+            }
+            .hero-sub {
+                font-size: 16px;
+                color: var(--muted);
+                max-width: 500px;
+                margin-bottom: 2.5rem;
+                line-height: 1.6;
+            }
+            .hero-links {
+                display: flex;
+                gap: 12px;
+                flex-wrap: wrap;
+            }
+            .pill {
+                display: inline-flex;
+                align-items: center;
+                gap: 7px;
+                font-size: 13px;
+                font-family: var(--mono);
+                padding: 8px 16px;
+                border: 1px solid var(--border);
+                border-radius: 100px;
+                color: var(--muted);
+                text-decoration: none;
+                transition:
+                    border-color 0.2s,
+                    color 0.2s,
+                    background 0.2s;
+                background: var(--bg2);
+            }
+            .pill:hover {
+                border-color: var(--accent);
+                color: var(--accent2);
+                background: rgba(123, 97, 255, 0.08);
+            }
+            .pill svg {
+                width: 14px;
+                height: 14px;
+            }
 
-  /* HERO */
-  .hero {
-    padding: 9rem 0 5rem;
-    border-bottom: 1px solid var(--border);
-  }
-  .hero-eyebrow {
-    font-family: var(--mono); font-size: 12px;
-    color: var(--green); letter-spacing: 0.1em;
-    margin-bottom: 1.25rem;
-    display: flex; align-items: center; gap: 8px;
-  }
-  .hero-eyebrow::before {
-    content: '';
-    width: 24px; height: 1px; background: var(--green);
-  }
-  .hero h1 {
-    font-family: var(--mono);
-    font-size: clamp(2rem, 6vw, 3.5rem);
-    font-weight: 700;
-    letter-spacing: -0.02em;
-    line-height: 1.1;
-    margin-bottom: 0.75rem;
-  }
-  .hero h1 span { color: var(--accent2); }
-  .hero-sub {
-    font-size: 16px; color: var(--muted);
-    max-width: 500px; margin-bottom: 2.5rem; line-height: 1.6;
-  }
-  .hero-links { display: flex; gap: 12px; flex-wrap: wrap; }
-  .pill {
-    display: inline-flex; align-items: center; gap: 7px;
-    font-size: 13px; font-family: var(--mono);
-    padding: 8px 16px;
-    border: 1px solid var(--border);
-    border-radius: 100px;
-    color: var(--muted);
-    text-decoration: none;
-    transition: border-color 0.2s, color 0.2s, background 0.2s;
-    background: var(--bg2);
-  }
-  .pill:hover { border-color: var(--accent); color: var(--accent2); background: rgba(123,97,255,0.08); }
-  .pill svg { width: 14px; height: 14px; }
+            section {
+                padding: 4rem 0;
+                border-bottom: 1px solid var(--border);
+            }
+            .s-label {
+                font-family: var(--mono);
+                font-size: 11px;
+                letter-spacing: 0.12em;
+                text-transform: uppercase;
+                color: var(--muted);
+                margin-bottom: 2rem;
+                display: flex;
+                align-items: center;
+                gap: 12px;
+            }
+            .s-label::after {
+                content: "";
+                flex: 1;
+                height: 1px;
+                background: var(--border);
+            }
 
-  /* SECTION */
-  section { padding: 4rem 0; border-bottom: 1px solid var(--border); }
-  .s-label {
-    font-family: var(--mono); font-size: 11px;
-    letter-spacing: 0.12em; text-transform: uppercase;
-    color: var(--muted); margin-bottom: 2rem;
-    display: flex; align-items: center; gap: 12px;
-  }
-  .s-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+            .about-text {
+                font-size: 16px;
+                line-height: 1.8;
+                color: #b0b0c8;
+                max-width: 640px;
+            }
+            .about-text strong {
+                color: var(--text);
+                font-weight: 500;
+            }
+            .stack-row {
+                margin-top: 2rem;
+                display: flex;
+                flex-wrap: wrap;
+                gap: 8px;
+            }
+            .tag {
+                font-family: var(--mono);
+                font-size: 12px;
+                padding: 4px 12px;
+                border: 1px solid var(--border);
+                border-radius: 4px;
+                color: var(--muted);
+                background: var(--bg3);
+                transition:
+                    border-color 0.2s,
+                    color 0.2s;
+            }
+            .tag:hover {
+                border-color: var(--accent);
+                color: var(--accent2);
+            }
 
-  /* ABOUT */
-  .about-text {
-    font-size: 16px; line-height: 1.8; color: #b0b0c8; max-width: 640px;
-  }
-  .about-text strong { color: var(--text); font-weight: 500; }
-  .stack-row {
-    margin-top: 2rem; display: flex; flex-wrap: wrap; gap: 8px;
-  }
-  .tag {
-    font-family: var(--mono); font-size: 12px;
-    padding: 4px 12px;
-    border: 1px solid var(--border);
-    border-radius: 4px; color: var(--muted);
-    background: var(--bg3);
-    transition: border-color 0.2s, color 0.2s;
-  }
-  .tag:hover { border-color: var(--accent); color: var(--accent2); }
+            .proj-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+                gap: 14px;
+            }
+            .proj-card {
+                background: var(--bg2);
+                border: 1px solid var(--border);
+                border-radius: 10px;
+                padding: 1.35rem 1.25rem;
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+                text-decoration: none;
+                color: inherit;
+                transition:
+                    border-color 0.2s,
+                    transform 0.2s,
+                    background 0.2s;
+                cursor: pointer;
+                position: relative;
+                overflow: hidden;
+            }
+            .proj-card::before {
+                content: "";
+                position: absolute;
+                inset: 0;
+                background: radial-gradient(
+                    circle at var(--mx, 50%) var(--my, 50%),
+                    rgba(123, 97, 255, 0.06) 0%,
+                    transparent 70%
+                );
+                opacity: 0;
+                transition: opacity 0.3s;
+            }
+            .proj-card:hover::before {
+                opacity: 1;
+            }
+            .proj-card:hover {
+                border-color: rgba(123, 97, 255, 0.4);
+                transform: translateY(-2px);
+                background: var(--bg3);
+            }
+            .proj-top {
+                display: flex;
+                align-items: flex-start;
+                justify-content: space-between;
+                gap: 8px;
+            }
+            .proj-name {
+                font-family: var(--mono);
+                font-size: 14px;
+                font-weight: 500;
+                color: var(--text);
+            }
+            .lang-dot {
+                display: flex;
+                align-items: center;
+                gap: 5px;
+                font-size: 11px;
+                color: var(--muted);
+                font-family: var(--mono);
+            }
+            .lang-dot span {
+                width: 8px;
+                height: 8px;
+                border-radius: 50%;
+                display: inline-block;
+                flex-shrink: 0;
+            }
+            .cpp {
+                background: #f34b7d;
+            }
+            .py {
+                background: #3572a5;
+            }
+            .proj-desc {
+                font-size: 13px;
+                color: var(--muted);
+                line-height: 1.6;
+                flex: 1;
+            }
+            .proj-link {
+                font-family: var(--mono);
+                font-size: 11px;
+                color: var(--accent);
+                display: flex;
+                align-items: center;
+                gap: 5px;
+                text-decoration: none;
+                margin-top: 4px;
+                opacity: 0;
+                transform: translateY(4px);
+                transition:
+                    opacity 0.2s,
+                    transform 0.2s;
+            }
+            .proj-card:hover .proj-link {
+                opacity: 1;
+                transform: translateY(0);
+            }
+            .proj-link svg {
+                width: 11px;
+                height: 11px;
+            }
 
-  /* PROJECTS */
-  .proj-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; }
+            .terminal {
+                background: var(--bg3);
+                border: 1px solid var(--border);
+                border-radius: 10px;
+                overflow: hidden;
+                margin-bottom: 1.5rem;
+            }
+            .term-bar {
+                background: var(--bg2);
+                padding: 10px 14px;
+                display: flex;
+                align-items: center;
+                gap: 7px;
+                border-bottom: 1px solid var(--border);
+            }
+            .dot {
+                width: 10px;
+                height: 10px;
+                border-radius: 50%;
+            }
+            .dot-r {
+                background: #ff5f57;
+            }
+            .dot-y {
+                background: #febc2e;
+            }
+            .dot-g {
+                background: #28c840;
+            }
+            .term-body {
+                padding: 1rem 1.25rem;
+                font-family: var(--mono);
+                font-size: 13px;
+                line-height: 1.8;
+            }
+            .term-line {
+                display: flex;
+                gap: 8px;
+            }
+            .term-prompt {
+                color: var(--green);
+                flex-shrink: 0;
+            }
+            .term-cmd {
+                color: var(--accent2);
+            }
+            .term-out {
+                color: var(--muted);
+            }
+            .term-out.highlight {
+                color: var(--text);
+            }
+            .cursor-blink {
+                display: inline-block;
+                width: 8px;
+                height: 14px;
+                background: var(--accent2);
+                vertical-align: middle;
+                animation: blink 1s step-end infinite;
+            }
+            @keyframes blink {
+                50% {
+                    opacity: 0;
+                }
+            }
 
-  .proj-card {
-    background: var(--bg2);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 1.35rem 1.25rem;
-    display: flex; flex-direction: column; gap: 10px;
-    text-decoration: none; color: inherit;
-    transition: border-color 0.2s, transform 0.2s, background 0.2s;
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
-  }
-  .proj-card::before {
-    content: '';
-    position: absolute; inset: 0;
-    background: radial-gradient(circle at var(--mx,50%) var(--my,50%), rgba(123,97,255,0.06) 0%, transparent 70%);
-    opacity: 0; transition: opacity 0.3s;
-  }
-  .proj-card:hover::before { opacity: 1; }
-  .proj-card:hover {
-    border-color: rgba(123,97,255,0.4);
-    transform: translateY(-2px);
-    background: var(--bg3);
-  }
-  .proj-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
-  .proj-name { font-family: var(--mono); font-size: 14px; font-weight: 500; color: var(--text); }
-  .lang-dot { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--muted); font-family: var(--mono); }
-  .lang-dot span {
-    width: 8px; height: 8px; border-radius: 50%;
-    display: inline-block; flex-shrink: 0;
-  }
-  .cpp { background: #f34b7d; }
-  .py  { background: #3572A5; }
-  .proj-desc { font-size: 13px; color: var(--muted); line-height: 1.6; flex: 1; }
-  .proj-link {
-    font-family: var(--mono); font-size: 11px; color: var(--accent);
-    display: flex; align-items: center; gap: 5px;
-    text-decoration: none; margin-top: 4px;
-    opacity: 0; transform: translateY(4px);
-    transition: opacity 0.2s, transform 0.2s;
-  }
-  .proj-card:hover .proj-link { opacity: 1; transform: translateY(0); }
-  .proj-link svg { width: 11px; height: 11px; }
+            .contact-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+                gap: 12px;
+            }
+            .contact-card {
+                background: var(--bg2);
+                border: 1px solid var(--border);
+                border-radius: 10px;
+                padding: 1.25rem;
+                text-decoration: none;
+                color: inherit;
+                display: flex;
+                flex-direction: column;
+                gap: 6px;
+                transition:
+                    border-color 0.2s,
+                    background 0.2s;
+            }
+            .contact-card:hover {
+                border-color: var(--accent);
+                background: rgba(123, 97, 255, 0.05);
+            }
+            .contact-icon {
+                font-size: 20px;
+                margin-bottom: 4px;
+            }
+            .contact-label {
+                font-family: var(--mono);
+                font-size: 11px;
+                color: var(--muted);
+                letter-spacing: 0.08em;
+                text-transform: uppercase;
+            }
+            .contact-val {
+                font-size: 13px;
+                color: var(--text);
+            }
 
-  /* TERMINAL ABOUT */
-  .terminal {
-    background: var(--bg3);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    overflow: hidden;
-    margin-bottom: 1.5rem;
-  }
-  .term-bar {
-    background: var(--bg2);
-    padding: 10px 14px;
-    display: flex; align-items: center; gap: 7px;
-    border-bottom: 1px solid var(--border);
-  }
-  .dot { width: 10px; height: 10px; border-radius: 50%; }
-  .dot-r { background: #ff5f57; }
-  .dot-y { background: #febc2e; }
-  .dot-g { background: #28c840; }
-  .term-body { padding: 1rem 1.25rem; font-family: var(--mono); font-size: 13px; line-height: 1.8; }
-  .term-line { display: flex; gap: 8px; }
-  .term-prompt { color: var(--green); flex-shrink: 0; }
-  .term-cmd { color: var(--accent2); }
-  .term-out { color: var(--muted); padding-left: 0; }
-  .term-out.highlight { color: var(--text); }
-  .cursor-blink {
-    display: inline-block; width: 8px; height: 14px;
-    background: var(--accent2); vertical-align: middle;
-    animation: blink 1s step-end infinite;
-  }
-  @keyframes blink { 50% { opacity: 0; } }
+            footer {
+                padding: 2rem 0;
+                text-align: center;
+                font-family: var(--mono);
+                font-size: 12px;
+                color: var(--muted);
+            }
 
-  /* CONTACT */
-  .contact-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; }
-  .contact-card {
-    background: var(--bg2);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 1.25rem;
-    text-decoration: none; color: inherit;
-    display: flex; flex-direction: column; gap: 6px;
-    transition: border-color 0.2s, background 0.2s;
-  }
-  .contact-card:hover { border-color: var(--accent); background: rgba(123,97,255,0.05); }
-  .contact-icon { font-size: 20px; margin-bottom: 4px; }
-  .contact-label { font-family: var(--mono); font-size: 11px; color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; }
-  .contact-val { font-size: 13px; color: var(--text); }
+            .fade-in {
+                opacity: 0;
+                transform: translateY(18px);
+                transition:
+                    opacity 0.5s ease,
+                    transform 0.5s ease;
+            }
+            .fade-in.visible {
+                opacity: 1;
+                transform: translateY(0);
+            }
 
-  /* FOOTER */
-  footer {
-    padding: 2rem 0;
-    text-align: center;
-    font-family: var(--mono);
-    font-size: 12px;
-    color: var(--muted);
-  }
+            #progress {
+                position: fixed;
+                top: 0;
+                left: 0;
+                height: 2px;
+                background: linear-gradient(90deg, var(--accent), var(--green));
+                z-index: 200;
+                width: 0%;
+                transition: width 0.1s linear;
+            }
 
-  /* scroll fade in */
-  .fade-in { opacity: 0; transform: translateY(18px); transition: opacity 0.5s ease, transform 0.5s ease; }
-  .fade-in.visible { opacity: 1; transform: translateY(0); }
+            @media (max-width: 600px) {
+                .hero {
+                    padding: 7rem 0 3rem;
+                }
+                .proj-grid {
+                    grid-template-columns: 1fr;
+                }
+                .contact-grid {
+                    grid-template-columns: 1fr;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div id="cursor-glow"></div>
+        <div id="progress"></div>
 
-  /* progress bar */
-  #progress {
-    position: fixed; top: 0; left: 0; height: 2px;
-    background: linear-gradient(90deg, var(--accent), var(--green));
-    z-index: 200; width: 0%; transition: width 0.1s linear;
-  }
+        <nav>
+            <div class="inner">
+                <span class="nav-logo">vikram.dev</span>
+                <div class="nav-links">
+                    <a href="#about">about</a>
+                    <a href="#projects">projects</a>
+                    <a href="#contact">contact</a>
+                </div>
+            </div>
+        </nav>
 
-  @media (max-width: 600px) {
-    .hero { padding: 7rem 0 3rem; }
-    .proj-grid { grid-template-columns: 1fr; }
-    .contact-grid { grid-template-columns: 1fr; }
-  }
-</style>
-</head>
-<body>
+        <main class="container">
+            <!-- HERO -->
+            <div class="hero fade-in">
+                <div class="hero-eyebrow">self-taught · systems programmer</div>
+                <h1>Vikram<br /><span>Aditya.</span></h1>
+                <p class="hero-sub">
+                    I build things from scratch to understand how they actually
+                    work — from neural nets and interpreters to terminal apps
+                    and 2D games.
+                </p>
+                <div class="hero-links">
+                    <a
+                        class="pill"
+                        href="https://github.com/SharmathePeak"
+                        target="_blank"
+                    >
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path
+                                d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"
+                            />
+                        </svg>
+                        SharmathePeak
+                    </a>
+                    <a
+                        class="pill"
+                        href="https://instagram.com/blatantlywrong"
+                        target="_blank"
+                    >
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path
+                                d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"
+                            />
+                        </svg>
+                        @blatantlywrong
+                    </a>
+                    <a class="pill" href="mailto:vikramaditya.toman@gmail.com">
+                        <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.8"
+                        >
+                            <rect x="2" y="4" width="20" height="16" rx="2" />
+                            <path
+                                d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"
+                            />
+                        </svg>
+                        email me
+                    </a>
+                </div>
+            </div>
 
-<div id="cursor-glow"></div>
-<div id="progress"></div>
+            <!-- ABOUT -->
+            <section id="about" class="fade-in">
+                <div class="s-label">about</div>
+                <div class="terminal">
+                    <div class="term-bar">
+                        <span class="dot dot-r"></span>
+                        <span class="dot dot-y"></span>
+                        <span class="dot dot-g"></span>
+                    </div>
+                    <div class="term-body" id="term-body">
+                        <div class="term-line">
+                            <span class="term-prompt">~$</span
+                            ><span class="term-cmd">cat about.txt</span>
+                        </div>
+                    </div>
+                </div>
+                <p class="about-text">
+                    I'm <strong>Vikram Aditya</strong>, a self-taught systems
+                    programmer currently studying at BITS Hyderabad. I've been
+                    coding since before college, teaching myself C, C++, Python,
+                    and low-level systems work from scratch — because I actually
+                    want to know what's happening under the hood.
+                </p>
+                <p class="about-text" style="margin-top: 1rem">
+                    My projects lean toward the foundational: neural nets
+                    without libraries, a Brainfuck interpreter, terminal apps,
+                    2D games in pure C++. I'm also into
+                    <strong>Linux ricing</strong> on Arch with Hyprland,
+                    drawing, and learning the path from C all the way to
+                    Assembly.
+                </p>
+                <div class="stack-row">
+                    <span class="tag">C</span>
+                    <span class="tag">C++</span>
+                    <span class="tag">Python</span>
+                    <span class="tag">OpenGL</span>
+                    <span class="tag">ncurses</span>
+                    <span class="tag">Arch Linux</span>
+                    <span class="tag">Hyprland</span>
+                    <span class="tag">Drawing</span>
+                    <span class="tag">Git</span>
+                    <span class="tag">Bash</span>
+                </div>
+            </section>
 
-<nav>
-  <div class="inner">
-    <span class="nav-logo">vikram.dev</span>
-    <div class="nav-links">
-      <a href="#about">about</a>
-      <a href="#projects">projects</a>
-      <a href="#contact">contact</a>
-    </div>
-  </div>
-</nav>
+            <!-- PROJECTS -->
+            <section id="projects" class="fade-in">
+                <div class="s-label">projects</div>
+                <div class="proj-grid">
+                    <a
+                        class="proj-card"
+                        href="https://github.com/SharmathePeak/ternote"
+                        target="_blank"
+                    >
+                        <div class="proj-top">
+                            <span class="proj-name">ternote</span>
+                            <span class="lang-dot"
+                                ><span class="cpp"></span>C++</span
+                            >
+                        </div>
+                        <p class="proj-desc">
+                            Terminal notes app with ncurses-style design,
+                            single-file storage, in-memory vector ops, and a
+                            clean install script. Shipped v0.1.
+                        </p>
+                        <a
+                            class="proj-link"
+                            href="https://github.com/SharmathePeak/ternote"
+                            target="_blank"
+                        >
+                            github.com/SharmathePeak/ternote
+                            <svg
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                            >
+                                <path d="M7 17L17 7M7 7h10v10" />
+                            </svg>
+                        </a>
+                    </a>
 
-<main class="container">
+                    <a
+                        class="proj-card"
+                        href="https://github.com/SharmathePeak/SingleArrayNeuralNetworkWithBackProp"
+                        target="_blank"
+                    >
+                        <div class="proj-top">
+                            <span class="proj-name">neural network</span>
+                            <span class="lang-dot"
+                                ><span class="py"></span>Python</span
+                            >
+                        </div>
+                        <p class="proj-desc">
+                            Backprop framework from scratch using a single flat
+                            array. Forward pass, loss, gradient descent — zero
+                            ML libraries.
+                        </p>
+                        <a
+                            class="proj-link"
+                            href="https://github.com/SharmathePeak/SingleArrayNeuralNetworkWithBackProp"
+                            target="_blank"
+                        >
+                            SingleArrayNeuralNetwork…
+                            <svg
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                            >
+                                <path d="M7 17L17 7M7 7h10v10" />
+                            </svg>
+                        </a>
+                    </a>
 
-  <!-- HERO -->
-  <div class="hero fade-in">
-    <div class="hero-eyebrow">self-taught · systems programmer</div>
-    <h1>Vikram<br/><span>Aditya.</span></h1>
-    <p class="hero-sub">I build things from scratch to understand how they actually work — from neural nets and interpreters to terminal apps and 2D games.</p>
-    <div class="hero-links">
-      <a class="pill" href="https://github.com/SharmathePeak" target="_blank">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
-        SharmathePeak
-      </a>
-      <a class="pill" href="https://instagram.com/blatantlywrong" target="_blank">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
-        @blatantlywrong
-      </a>
-      <a class="pill" href="mailto:vikramaditya.toman@gmail.com">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
-        email me
-      </a>
-    </div>
-  </div>
+                    <a
+                        class="proj-card"
+                        href="https://github.com/SharmathePeak/BrainfkInterpreter"
+                        target="_blank"
+                    >
+                        <div class="proj-top">
+                            <span class="proj-name">BF interpreter</span>
+                            <span class="lang-dot"
+                                ><span class="cpp"></span>C++</span
+                            >
+                        </div>
+                        <p class="proj-desc">
+                            Complete Brainfuck interpreter — parser, memory
+                            tape, control flow, all from scratch. Classic
+                            systems exercise.
+                        </p>
+                        <a
+                            class="proj-link"
+                            href="https://github.com/SharmathePeak/BrainfkInterpreter"
+                            target="_blank"
+                        >
+                            BrainfkInterpreter
+                            <svg
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                            >
+                                <path d="M7 17L17 7M7 7h10v10" />
+                            </svg>
+                        </a>
+                    </a>
 
-  <!-- ABOUT -->
-  <section id="about" class="fade-in">
-    <div class="s-label">about</div>
-    <div class="terminal">
-      <div class="term-bar">
-        <span class="dot dot-r"></span>
-        <span class="dot dot-y"></span>
-        <span class="dot dot-g"></span>
-      </div>
-      <div class="term-body" id="term-body">
-        <div class="term-line"><span class="term-prompt">~$</span><span class="term-cmd">cat about.txt</span></div>
-      </div>
-    </div>
-    <p class="about-text">
-      I'm <strong>Vikram Aditya</strong>, a self-taught systems programmer currently studying at BITS Hyderabad. I've been coding since before college, teaching myself C, C++, Python, and low-level systems work from scratch — because I actually want to know what's happening under the hood.
-    </p>
-    <p class="about-text" style="margin-top:1rem">
-      My projects lean toward the foundational: neural nets without libraries, a Brainfuck interpreter, terminal apps, 2D games in pure C++. I'm also into <strong>Linux ricing</strong> on Arch with Hyprland, drawing, and learning the path from C all the way to Assembly.
-    </p>
-    <div class="stack-row">
-      <span class="tag">C</span>
-      <span class="tag">C++</span>
-      <span class="tag">Python</span>
-      <span class="tag">OpenGL</span>
-      <span class="tag">ncurses</span>
-      <span class="tag">Arch Linux</span>
-      <span class="tag">Hyprland</span>
-      <span class="tag">Drawing</span>
-      <span class="tag">Git</span>
-      <span class="tag">Bash</span>
-    </div>
-  </section>
+                    <a
+                        class="proj-card"
+                        href="https://github.com/SharmathePeak/TBSWM"
+                        target="_blank"
+                    >
+                        <div class="proj-top">
+                            <span class="proj-name">TBSWM</span>
+                            <span class="lang-dot"
+                                ><span class="cpp"></span>C++</span
+                            >
+                        </div>
+                        <p class="proj-desc">
+                            Text-based 2-player combat: Warrior vs Mage.
+                            Turn-based CLI with typed move states, class
+                            abilities, and status effects.
+                        </p>
+                        <a
+                            class="proj-link"
+                            href="https://github.com/SharmathePeak/TBSWM"
+                            target="_blank"
+                        >
+                            github.com/SharmathePeak/TBSWM
+                            <svg
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                            >
+                                <path d="M7 17L17 7M7 7h10v10" />
+                            </svg>
+                        </a>
+                    </a>
 
-  <!-- PROJECTS -->
-  <section id="projects" class="fade-in">
-    <div class="s-label">projects</div>
-    <div class="proj-grid">
+                    <a
+                        class="proj-card"
+                        href="https://github.com/SharmathePeak/CubeJump_Sharma"
+                        target="_blank"
+                    >
+                        <div class="proj-top">
+                            <span class="proj-name">CubeJump</span>
+                            <span class="lang-dot"
+                                ><span class="cpp"></span>C++</span
+                            >
+                        </div>
+                        <p class="proj-desc">
+                            First 2D game in pure C++ — no engine. Manual
+                            physics, collision detection, and rendering loop
+                            built from first principles.
+                        </p>
+                        <a
+                            class="proj-link"
+                            href="https://github.com/SharmathePeak/CubeJump_Sharma"
+                            target="_blank"
+                        >
+                            CubeJump_Sharma
+                            <svg
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                            >
+                                <path d="M7 17L17 7M7 7h10v10" />
+                            </svg>
+                        </a>
+                    </a>
+                </div>
+            </section>
 
-      <a class="proj-card" href="https://github.com/SharmathePeak/ternote" target="_blank">
-        <div class="proj-top">
-          <span class="proj-name">ternote</span>
-          <span class="lang-dot"><span class="cpp"></span>C++</span>
-        </div>
-        <p class="proj-desc">Terminal notes app with ncurses-style design, single-file storage, in-memory vector ops, and a clean install script. Shipped v0.1.</p>
-        <a class="proj-link" href="https://github.com/SharmathePeak/ternote" target="_blank">
-          github.com/SharmathePeak/ternote
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M7 7h10v10"/></svg>
-        </a>
-      </a>
+            <!-- CONTACT -->
+            <section id="contact" class="fade-in">
+                <div class="s-label">contact</div>
+                <div class="contact-grid">
+                    <a
+                        class="contact-card"
+                        href="mailto:vikramaditya.toman@gmail.com"
+                    >
+                        <div class="contact-icon">✉️</div>
+                        <div class="contact-label">Email</div>
+                        <div class="contact-val">
+                            vikramaditya.toman@gmail.com
+                        </div>
+                    </a>
+                    <a
+                        class="contact-card"
+                        href="https://github.com/SharmathePeak"
+                        target="_blank"
+                    >
+                        <div class="contact-icon">⚙️</div>
+                        <div class="contact-label">GitHub</div>
+                        <div class="contact-val">github.com/SharmathePeak</div>
+                    </a>
+                    <a
+                        class="contact-card"
+                        href="https://instagram.com/blatantlywrong"
+                        target="_blank"
+                    >
+                        <div class="contact-icon">📸</div>
+                        <div class="contact-label">Instagram</div>
+                        <div class="contact-val">@blatantlywrong</div>
+                    </a>
+                </div>
+            </section>
+        </main>
 
-      <a class="proj-card" href="https://github.com/SharmathePeak/SingleArrayNeuralNetworkWithBackProp" target="_blank">
-        <div class="proj-top">
-          <span class="proj-name">neural network</span>
-          <span class="lang-dot"><span class="py"></span>Python</span>
-        </div>
-        <p class="proj-desc">Backprop framework from scratch using a single flat array. Forward pass, loss, gradient descent — zero ML libraries.</p>
-        <a class="proj-link" href="https://github.com/SharmathePeak/SingleArrayNeuralNetworkWithBackProp" target="_blank">
-          SingleArrayNeuralNetwork…
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M7 7h10v10"/></svg>
-        </a>
-      </a>
+        <footer>
+            <div class="container">
+                built by vikram · designed with
+                <a
+                    href="https://claude.ai"
+                    target="_blank"
+                    style="color: var(--accent2); text-decoration: none"
+                    >Claude</a
+                >
+                · <span id="yr"></span>
+            </div>
+        </footer>
 
-      <a class="proj-card" href="https://github.com/SharmathePeak/BrainfkInterpreter" target="_blank">
-        <div class="proj-top">
-          <span class="proj-name">BF interpreter</span>
-          <span class="lang-dot"><span class="cpp"></span>C++</span>
-        </div>
-        <p class="proj-desc">Complete Brainfuck interpreter — parser, memory tape, control flow, all from scratch. Classic systems exercise.</p>
-        <a class="proj-link" href="https://github.com/SharmathePeak/BrainfkInterpreter" target="_blank">
-          BrainfkInterpreter
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M7 7h10v10"/></svg>
-        </a>
-      </a>
+        <script>
+            document.getElementById("yr").textContent =
+                new Date().getFullYear();
 
-      <a class="proj-card" href="https://github.com/SharmathePeak/TBSWM" target="_blank">
-        <div class="proj-top">
-          <span class="proj-name">TBSWM</span>
-          <span class="lang-dot"><span class="cpp"></span>C++</span>
-        </div>
-        <p class="proj-desc">Text-based 2-player combat: Warrior vs Mage. Turn-based CLI with typed move states, class abilities, and status effects.</p>
-        <a class="proj-link" href="https://github.com/SharmathePeak/TBSWM" target="_blank">
-          github.com/SharmathePeak/TBSWM
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M7 7h10v10"/></svg>
-        </a>
-      </a>
+            const glow = document.getElementById("cursor-glow");
+            document.addEventListener("mousemove", (e) => {
+                glow.style.left = e.clientX + "px";
+                glow.style.top = e.clientY + "px";
+            });
 
-      <a class="proj-card" href="https://github.com/SharmathePeak/CubeJump_Sharma" target="_blank">
-        <div class="proj-top">
-          <span class="proj-name">CubeJump</span>
-          <span class="lang-dot"><span class="cpp"></span>C++</span>
-        </div>
-        <p class="proj-desc">First 2D game in pure C++ — no engine. Manual physics, collision detection, and rendering loop built from first principles.</p>
-        <a class="proj-link" href="https://github.com/SharmathePeak/CubeJump_Sharma" target="_blank">
-          CubeJump_Sharma
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M7 7h10v10"/></svg>
-        </a>
-      </a>
+            const bar = document.getElementById("progress");
+            window.addEventListener("scroll", () => {
+                const pct =
+                    (window.scrollY /
+                        (document.body.scrollHeight - window.innerHeight)) *
+                    100;
+                bar.style.width = pct + "%";
+            });
 
-    </div>
-  </section>
+            const obs = new IntersectionObserver(
+                (entries) => {
+                    entries.forEach((e) => {
+                        if (e.isIntersecting) {
+                            e.target.classList.add("visible");
+                            obs.unobserve(e.target);
+                        }
+                    });
+                },
+                { threshold: 0.1 },
+            );
+            document
+                .querySelectorAll(".fade-in")
+                .forEach((el) => obs.observe(el));
 
-  <!-- CONTACT -->
-  <section id="contact" class="fade-in">
-    <div class="s-label">contact</div>
-    <div class="contact-grid">
-      <a class="contact-card" href="mailto:vikramaditya.toman@gmail.com">
-        <div class="contact-icon">✉️</div>
-        <div class="contact-label">Email</div>
-        <div class="contact-val">vikramaditya.toman@gmail.com</div>
-      </a>
-      <a class="contact-card" href="https://github.com/SharmathePeak" target="_blank">
-        <div class="contact-icon">⚙️</div>
-        <div class="contact-label">GitHub</div>
-        <div class="contact-val">github.com/SharmathePeak</div>
-      </a>
-      <a class="contact-card" href="https://instagram.com/blatantlywrong" target="_blank">
-        <div class="contact-icon">📸</div>
-        <div class="contact-label">Instagram</div>
-        <div class="contact-val">@blatantlywrong</div>
-      </a>
-    </div>
-  </section>
+            document.querySelectorAll(".proj-card").forEach((card) => {
+                card.addEventListener("mousemove", (e) => {
+                    const r = card.getBoundingClientRect();
+                    card.style.setProperty(
+                        "--mx",
+                        ((e.clientX - r.left) / r.width) * 100 + "%",
+                    );
+                    card.style.setProperty(
+                        "--my",
+                        ((e.clientY - r.top) / r.height) * 100 + "%",
+                    );
+                });
+            });
 
-</main>
+            const termBody = document.getElementById("term-body");
+            const lines = [
+                { type: "out", text: "" },
+                { type: "out", text: "  name    :  Vikram Aditya", hl: true },
+                { type: "out", text: "  status  :  Studying @ BITS Hyderabad" },
+                {
+                    type: "out",
+                    text: "  focus   :  Systems programming, low-level C/C++",
+                },
+                {
+                    type: "out",
+                    text: "  hobbies :  Linux ricing, drawing, game dev",
+                },
+                {
+                    type: "out",
+                    text: "  vibes   :  Good Night Eri, Steins;Gate, Chainsaw Man",
+                },
+                {
+                    type: "out",
+                    text: "  author  :  Tatsuki Fujimoto",
+                    hl: true,
+                },
+                { type: "out", text: "" },
+                { type: "prompt", cmd: "echo $LEARNING_PATH" },
+                {
+                    type: "out",
+                    text: '  <span style="color:#22c55e">Python</span> \u2192 <span style="color:#22c55e">C++</span> \u2192 <span style="color:#eab308">C</span> \u2192 <span style="color:#eab308">Zig</span> \u2192 <span style="color:#6b6b7e">Rust</span> \u2192 <span style="color:#6b6b7e">Assembly</span>',
+                },
+                { type: "out", text: "" },
+                { type: "prompt", cmd: "", cursor: true },
+            ];
 
-<footer>
-  <div class="container">built by vikram · designed with <a href="https://claude.ai" target="_blank" style="color:var(--accent2);text-decoration:none;">Claude</a> · <span id="yr"></span></div>
-</footer>
+            let i = 0;
+            function addLine() {
+                if (i >= lines.length) return;
+                const l = lines[i++];
+                const div = document.createElement("div");
+                if (l.type === "prompt") {
+                    div.className = "term-line";
+                    div.innerHTML =
+                        '<span class="term-prompt">~$</span><span class="term-cmd"> ' +
+                        (l.cmd || "") +
+                        "</span>" +
+                        (l.cursor ? '<span class="cursor-blink"></span>' : "");
+                } else {
+                    div.className = "term-line";
+                    div.innerHTML =
+                        '<span class="term-out' +
+                        (l.hl ? " highlight" : "") +
+                        '">' +
+                        (l.text || "&nbsp;") +
+                        "</span>";
+                }
+                termBody.appendChild(div);
+                setTimeout(
+                    addLine,
+                    l.text === "" ? 60 : l.type === "prompt" ? 300 : 80,
+                );
+            }
 
-<script>
-  // year
-  document.getElementById('yr').textContent = new Date().getFullYear();
+            const aboutSec = document.getElementById("about");
+            const termObs = new IntersectionObserver(
+                (entries) => {
+                    if (entries[0].isIntersecting) {
+                        setTimeout(addLine, 400);
+                        termObs.disconnect();
+                    }
+                },
+                { threshold: 0.3 },
+            );
+            termObs.observe(aboutSec);
 
-  // cursor glow
-  const glow = document.getElementById('cursor-glow');
-  document.addEventListener('mousemove', e => {
-    glow.style.left = e.clientX + 'px';
-    glow.style.top  = e.clientY + 'px';
-  });
+            // vim keybindings — gg = top, G = bottom
+            const toast = document.createElement("div");
+            toast.style.cssText =
+                'position:fixed;bottom:2rem;right:2rem;background:#16161b;border:1px solid rgba(123,97,255,0.4);color:#a78bfa;font-family:"JetBrains Mono",monospace;font-size:12px;padding:8px 16px;border-radius:6px;z-index:999;opacity:0;transition:opacity 0.2s;pointer-events:none;';
+            document.body.appendChild(toast);
 
-  // scroll progress bar
-  const bar = document.getElementById('progress');
-  window.addEventListener('scroll', () => {
-    const pct = window.scrollY / (document.body.scrollHeight - window.innerHeight) * 100;
-    bar.style.width = pct + '%';
-  });
+            function showToast(msg) {
+                toast.textContent = msg;
+                toast.style.opacity = "1";
+                clearTimeout(toast._t);
+                toast._t = setTimeout(() => (toast.style.opacity = "0"), 800);
+            }
 
-  // fade in on scroll
-  const obs = new IntersectionObserver(entries => {
-    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
-  }, { threshold: 0.1 });
-  document.querySelectorAll('.fade-in').forEach(el => obs.observe(el));
+            let lastKey = "";
+            let lastKeyTime = 0;
+            document.addEventListener("keydown", (e) => {
+                if (
+                    e.target.tagName === "INPUT" ||
+                    e.target.tagName === "TEXTAREA"
+                )
+                    return;
+                const now = Date.now();
 
-  // project card gradient follow
-  document.querySelectorAll('.proj-card').forEach(card => {
-    card.addEventListener('mousemove', e => {
-      const r = card.getBoundingClientRect();
-      card.style.setProperty('--mx', ((e.clientX - r.left) / r.width * 100) + '%');
-      card.style.setProperty('--my', ((e.clientY - r.top)  / r.height * 100) + '%');
-    });
-  });
+                if (e.key === "G" && !e.ctrlKey) {
+                    window.scrollTo({
+                        top: document.body.scrollHeight,
+                        behavior: "smooth",
+                    });
+                    showToast("G");
+                    lastKey = "";
+                    return;
+                }
 
-  // terminal typewriter
-  const termBody = document.getElementById('term-body');
-  const lines = [
-    { type: 'out', text: '' },
-    { type: 'out', text: '  name    :  Vikram Aditya', hl: true },
-    { type: 'out', text: '  status  :  Studying @ BITS Hyderabad' },
-    { type: 'out', text: '  focus   :  Systems programming, low-level C/C++' },
-    { type: 'out', text: '  hobbies :  Linux ricing, drawing, game dev' },
-    { type: 'out', text: '  vibes   :  Good Night Eri, Steins;Gate, Chainsaw Man' },
-    { type: 'out', text: '  author  :  Tatsuki Fujimoto', hl: true },
-    { type: 'out', text: '' },
-    { type: 'prompt', cmd: 'echo $LEARNING_PATH' },
-    { type: 'out', text: '  <span style="color:#22c55e">Python</span> → <span style="color:#22c55e">C++</span> → <span style="color:#eab308">C</span> → <span style="color:#eab308">Zig</span> → <span style="color:#6b6b7e">Rust</span> → <span style="color:#6b6b7e">Assembly</span>' },
-    { type: 'out', text: '' },
-    { type: 'prompt', cmd: '', cursor: true },
-  ];
+                if (e.key === "g") {
+                    if (lastKey === "g" && now - lastKeyTime < 500) {
+                        window.scrollTo({ top: 0, behavior: "smooth" });
+                        showToast("gg");
+                        lastKey = "";
+                        return;
+                    }
+                    lastKey = "g";
+                    lastKeyTime = now;
+                    return;
+                }
 
-  let i = 0;
-  function addLine() {
-    if (i >= lines.length) return;
-    const l = lines[i++];
-    const div = document.createElement('div');
-    if (l.type === 'prompt') {
-      div.className = 'term-line';
-      div.innerHTML = `<span class="term-prompt">~$</span><span class="term-cmd"> ${l.cmd || ''}</span>${l.cursor ? '<span class="cursor-blink"></span>' : ''}`;
-    } else {
-      div.className = 'term-line';
-      div.innerHTML = `<span class="term-out${l.hl ? ' highlight' : ''}">${l.text || '&nbsp;'}</span>`;
-    }
-    termBody.appendChild(div);
-    setTimeout(addLine, l.text === '' ? 60 : l.type === 'prompt' ? 300 : 80);
-  }
-
-  // start typewriter when about section visible
-  const aboutSec = document.getElementById('about');
-  const termObs = new IntersectionObserver(entries => {
-    if (entries[0].isIntersecting) { setTimeout(addLine, 400); termObs.disconnect(); }
-  }, { threshold: 0.3 });
-  termObs.observe(aboutSec);
-</script>
-</body>
+                lastKey = "";
+            });
+        </script>
+    </body>
 </html>
+
