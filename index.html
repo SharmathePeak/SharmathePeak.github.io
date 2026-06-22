@@ -421,6 +421,25 @@
                     opacity: 0;
                 }
             }
+
+            /* ---- boot loading animation ---- */
+            .term-boot-bar {
+                color: var(--muted);
+                font-family: var(--mono);
+                font-size: 13px;
+                padding: 2px 0;
+            }
+            .term-boot-bar .bar-fill {
+                display: inline-block;
+                color: var(--green);
+                letter-spacing: -1px;
+            }
+            .term-boot-bar .bar-empty {
+                display: inline-block;
+                color: var(--border-hover);
+                letter-spacing: -1px;
+            }
+
             .contact-grid {
                 display: grid;
                 grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
@@ -496,6 +515,9 @@
                 }
                 .contact-grid {
                     grid-template-columns: 1fr;
+                }
+                .terminal {
+                    pointer-events: none; /* Makes the terminal inaccessible to interactions on mobile */
                 }
             }
 
@@ -640,7 +662,6 @@
             </div>
         </nav>
         <main class="container">
-            <!-- HERO -->
             <div class="hero fade-in">
                 <div class="hero-eyebrow">self-taught · systems programmer</div>
                 <h1>Vishnu<br /><span>Sharma.</span></h1>
@@ -690,7 +711,6 @@
                     </a>
                 </div>
             </div>
-            <!-- ABOUT -->
             <section id="about" class="fade-in">
                 <div class="s-label">about</div>
                 <div class="terminal">
@@ -699,12 +719,7 @@
                         <span class="dot dot-y"></span>
                         <span class="dot dot-g"></span>
                     </div>
-                    <div class="term-body" id="term-body">
-                        <div class="term-line">
-                            <span class="term-prompt">~$</span
-                            ><span class="term-cmd">cat about.txt</span>
-                        </div>
-                    </div>
+                    <div class="term-body" id="term-body"></div>
                 </div>
                 <p class="about-text">
                     I'm <strong>Vishnu Sharma</strong>, a self-taught systems
@@ -734,7 +749,6 @@
                     <span class="tag">Bash</span>
                 </div>
             </section>
-            <!-- PROJECTS -->
             <section id="projects" class="fade-in">
                 <div class="s-label">projects</div>
                 <div class="proj-grid">
@@ -900,7 +914,6 @@
                     </a>
                 </div>
             </section>
-            <!-- CONTACT -->
             <section id="contact" class="fade-in">
                 <div class="s-label">contact</div>
                 <div class="contact-grid">
@@ -946,7 +959,6 @@
             </div>
         </footer>
 
-        <!-- vim layer: search bar -->
         <div id="vim-search-bar">
             <span class="vs-prefix">/</span>
             <input
@@ -959,7 +971,6 @@
             <span class="vs-count" id="vim-search-count"></span>
         </div>
 
-        <!-- vim layer: cheatsheet -->
         <div id="vim-help-overlay">
             <div class="vim-help-card">
                 <div class="vim-help-title">
@@ -1029,6 +1040,12 @@
                         ><kbd class="vim-key">?</kbd></span
                     >
                 </div>
+                <div class="vim-help-row">
+                    <span class="vim-help-desc">reload page (terminal)</span>
+                    <span class="vim-help-keys"
+                        ><kbd class="vim-key">reboot</kbd></span
+                    >
+                </div>
             </div>
         </div>
 
@@ -1075,8 +1092,79 @@
                     );
                 });
             });
+
+            // ---------------------------------------------------------------
+            // terminal boot sequence + always-on interactive prompt
+            // ---------------------------------------------------------------
             const termBody = document.getElementById("term-body");
-            const lines = [
+            const terminalEl = document.querySelector(".terminal");
+
+            // helper: append a line to the terminal
+            function printLine(html, opts = {}) {
+                const div = document.createElement("div");
+                div.className = "term-line";
+                if (opts.prompt) {
+                    div.innerHTML =
+                        '<span class="term-prompt">~$</span><span class="term-cmd"> ' +
+                        html +
+                        "</span>";
+                } else {
+                    div.innerHTML =
+                        '<span class="term-out' +
+                        (opts.hl ? " highlight" : "") +
+                        '">' +
+                        (html || "&nbsp;") +
+                        "</span>";
+                }
+                termBody.appendChild(div);
+                termBody.scrollTop = termBody.scrollHeight;
+                return div;
+            }
+
+            // animated progress bar — returns a promise that resolves when done
+            function animateBootBar(label, durationMs) {
+                return new Promise((resolve) => {
+                    const TOTAL = 28;
+                    const wrapper = document.createElement("div");
+                    wrapper.className = "term-line";
+                    wrapper.innerHTML =
+                        '<span class="term-out term-boot-bar">' +
+                        label +
+                        ' [<span class="bar-fill"></span><span class="bar-empty">' +
+                        "░".repeat(TOTAL) +
+                        "</span>] <span class='pct'>0%</span>" +
+                        "</span>";
+                    termBody.appendChild(wrapper);
+                    termBody.scrollTop = termBody.scrollHeight;
+
+                    const fillEl = wrapper.querySelector(".bar-fill");
+                    const emptyEl = wrapper.querySelector(".bar-empty");
+                    const pctEl = wrapper.querySelector(".pct");
+                    const interval = durationMs / TOTAL;
+                    let filled = 0;
+
+                    const tick = setInterval(() => {
+                        filled++;
+                        fillEl.textContent = "█".repeat(filled);
+                        emptyEl.textContent = "░".repeat(TOTAL - filled);
+                        const pct = Math.round((filled / TOTAL) * 100);
+                        pctEl.textContent = pct + "%";
+                        if (filled >= TOTAL) {
+                            clearInterval(tick);
+                            resolve();
+                        }
+                    }, interval);
+                });
+            }
+
+            const BOOT_LINES = [
+                { type: "out", text: "" },
+                { type: "out", text: "  sharma-os v1.0 — booting…", hl: true },
+                { type: "out", text: "" },
+            ];
+
+            const INFO_LINES = [
+                { type: "prompt", cmd: "cat about.txt" },
                 { type: "out", text: "" },
                 { type: "out", text: "  name    :  Vishnu Sharma", hl: true },
                 { type: "out", text: "  status  :  Studying @ BITS Hyderabad" },
@@ -1105,84 +1193,65 @@
                 },
                 { type: "out", text: "" },
             ];
-            let i = 0;
-            function addLine() {
-                if (i >= lines.length) {
-                    spawnPrompt();
-                    return;
-                }
-                const l = lines[i++];
-                const div = document.createElement("div");
-                if (l.type === "prompt") {
-                    div.className = "term-line";
-                    div.innerHTML =
-                        '<span class="term-prompt">~$</span><span class="term-cmd"> ' +
-                        (l.cmd || "") +
-                        "</span>" +
-                        (l.cursor ? '<span class="cursor-blink"></span>' : "");
-                } else {
-                    div.className = "term-line";
-                    div.innerHTML =
-                        '<span class="term-out' +
-                        (l.hl ? " highlight" : "") +
-                        '">' +
-                        (l.text || "&nbsp;") +
-                        "</span>";
-                }
-                termBody.appendChild(div);
-                setTimeout(
-                    addLine,
-                    l.text === "" ? 60 : l.type === "prompt" ? 300 : 80,
-                );
-            }
-            const aboutSec = document.getElementById("about");
-            const termObs = new IntersectionObserver(
-                (entries) => {
-                    if (entries[0].isIntersecting) {
-                        setTimeout(addLine, 400);
-                        termObs.disconnect();
+
+            function renderLines(lines, callback) {
+                let i = 0;
+                function next() {
+                    if (i >= lines.length) {
+                        if (callback) callback();
+                        return;
                     }
-                },
-                { threshold: 0.3 },
-            );
-            termObs.observe(aboutSec);
-
-            // ---------------------------------------------------------------
-            // hidden terminal — unlocks only on desktop, only after the
-            // Konami code (↑ ↑ ↓ ↓ ← → ← → B A) is typed anywhere on the page
-            // ---------------------------------------------------------------
-            const isTouchDevice =
-                window.matchMedia("(pointer: coarse)").matches &&
-                !window.matchMedia("(any-pointer: fine)").matches;
-
-            if (isTouchDevice) {
-                console.log(
-                    "[konami] disabled — device reports coarse-only pointer (touch, no mouse/trackpad)",
-                );
-            }
-
-            const terminalEl = document.querySelector(".terminal");
-
-            function printLine(html, opts = {}) {
-                const div = document.createElement("div");
-                div.className = "term-line";
-                if (opts.prompt) {
-                    div.innerHTML =
-                        '<span class="term-prompt">~$</span><span class="term-cmd"> ' +
-                        html +
-                        "</span>";
-                } else {
-                    div.innerHTML =
-                        '<span class="term-out' +
-                        (opts.hl ? " highlight" : "") +
-                        '">' +
-                        (html || "&nbsp;") +
-                        "</span>";
+                    const l = lines[i++];
+                    const div = document.createElement("div");
+                    if (l.type === "prompt") {
+                        div.className = "term-line";
+                        div.innerHTML =
+                            '<span class="term-prompt">~$</span><span class="term-cmd"> ' +
+                            (l.cmd || "") +
+                            "</span>";
+                    } else {
+                        div.className = "term-line";
+                        div.innerHTML =
+                            '<span class="term-out' +
+                            (l.hl ? " highlight" : "") +
+                            '">' +
+                            (l.text || "&nbsp;") +
+                            "</span>";
+                    }
+                    termBody.appendChild(div);
+                    termBody.scrollTop = termBody.scrollHeight;
+                    setTimeout(
+                        next,
+                        l.text === "" ? 50 : l.type === "prompt" ? 250 : 70,
+                    );
                 }
-                termBody.appendChild(div);
-                termBody.scrollTop = termBody.scrollHeight;
+                next();
             }
 
+            async function runBootSequence() {
+                // step 1: boot lines
+                await new Promise((res) => renderLines(BOOT_LINES, res));
+
+                // step 2: three loading bars
+                await animateBootBar("  loading kernel   ", 600);
+                await animateBootBar("  mounting fs      ", 500);
+                await animateBootBar("  init services    ", 700);
+
+                // step 3: ready line
+                printLine("", {});
+                printLine("  system ready.", { hl: true });
+                printLine("", {});
+
+                // step 4: about info lines
+                await new Promise((res) => renderLines(INFO_LINES, res));
+
+                // step 5: spawn the live prompt (do not auto-focus)
+                spawnPrompt(false);
+            }
+
+            // ---------------------------------------------------------------
+            // command definitions
+            // ---------------------------------------------------------------
             const SECRET_DOC = `
   [ Quantum Entanglement ]
 
@@ -1264,6 +1333,7 @@
                     printLine("  cat &lt;file&gt;");
                     printLine("  echo &lt;text&gt;");
                     printLine("  whoami");
+                    printLine("  reboot");
                 } else if (cmd === "cat about.txt") {
                     ABOUT_TXT.forEach((line, idx) =>
                         printLine(line, {
@@ -1276,6 +1346,9 @@
                     printLine(LEARNING_PATH_LINE);
                 } else if (cmd === "clear") {
                     termBody.innerHTML = "";
+                } else if (cmd === "reboot") {
+                    printLine("  rebooting…", { hl: true });
+                    setTimeout(() => window.location.reload(), 800);
                 } else if (cmd === "echo" || cmd.startsWith("echo ")) {
                     const text = cmd.slice(4).trim();
                     const escaped = text
@@ -1288,99 +1361,73 @@
                 }
             }
 
-            // builds one live prompt row: ~$ <typed text><thick blinking cursor>
-            // the real <input> is invisible and only exists to capture keys —
-            // what's actually seen is the span + the same .cursor-blink block
-            // used by the boot sequence, so it reads as the same terminal.
-            // Before the Konami code is entered the row is purely decorative:
-            // it shows the idle cursor but the input never gains focus and
-            // ignores keystrokes, so nothing happens until unlocked.
-            function spawnPrompt() {
+            // live prompt row — only focuses when explicitly told to do so
+            function spawnPrompt(shouldFocus = false) {
                 const row = document.createElement("div");
                 row.className = "term-line term-input-line";
                 row.innerHTML =
                     '<span class="term-prompt">~$</span>' +
                     '<span class="term-input-display"></span>' +
                     '<span class="cursor-blink"></span>' +
-                    '<input class="term-input" type="text" autocomplete="off" spellcheck="false" tabindex="-1" />';
+                    '<input class="term-input" type="text" autocomplete="off" spellcheck="false" />';
                 termBody.appendChild(row);
                 const display = row.querySelector(".term-input-display");
                 const input = row.querySelector(".term-input");
 
                 input.addEventListener("input", () => {
-                    if (!terminalEl.classList.contains("unlocked")) {
-                        input.value = "";
-                        return;
-                    }
                     display.textContent = input.value;
                 });
                 input.addEventListener("keydown", (e) => {
-                    if (!terminalEl.classList.contains("unlocked")) return;
                     e.stopPropagation();
                     if (e.key === "Enter") {
                         const val = input.value;
                         row.remove();
                         runCommand(val);
-                        spawnPrompt();
+                        // keep focus since they are actively working inside the prompt
+                        spawnPrompt(true);
                     }
                 });
-                if (terminalEl.classList.contains("unlocked")) {
-                    input.removeAttribute("tabindex");
+                if (shouldFocus && window.innerWidth > 600) {
                     input.focus();
                 }
                 termBody.scrollTop = termBody.scrollHeight;
             }
 
-            if (!isTouchDevice) {
-                const KONAMI = [
-                    "ArrowUp",
-                    "ArrowUp",
-                    "ArrowDown",
-                    "ArrowDown",
-                    "ArrowLeft",
-                    "ArrowRight",
-                    "ArrowLeft",
-                    "ArrowRight",
-                    "b",
-                    "a",
-                ];
-                let konamiProgress = 0;
+            // click anywhere on the terminal body to focus the input
+            terminalEl.addEventListener("click", () => {
+                if (window.innerWidth <= 600) return; // Prevent focus on mobile breakpoints
+                const inp = termBody.querySelector(".term-input");
+                if (inp) inp.focus();
+            });
 
-                document.addEventListener("keydown", (e) => {
-                    if (terminalEl.classList.contains("unlocked")) return;
-                    const expected = KONAMI[konamiProgress];
-                    const got =
-                        expected === "b" || expected === "a"
-                            ? e.key.toLowerCase()
-                            : e.key;
-                    if (got === expected) {
-                        konamiProgress++;
-                        if (konamiProgress === KONAMI.length) {
-                            terminalEl.classList.add("unlocked");
-                            showToast("konami!");
-                            const idleRow =
-                                termBody.querySelector(".term-input-line");
-                            if (idleRow) idleRow.remove();
-                            spawnPrompt();
-                        }
-                    } else {
-                        konamiProgress = got === KONAMI[0] ? 1 : 0;
+            // trigger boot sequence when the about section scrolls into view
+            const aboutSec = document.getElementById("about");
+            const termObs = new IntersectionObserver(
+                (entries) => {
+                    if (entries[0].isIntersecting) {
+                        setTimeout(runBootSequence, 400);
+                        termObs.disconnect();
                     }
-                });
-            }
+                },
+                { threshold: 0.3 },
+            );
+            termObs.observe(aboutSec);
 
             // ---------------------------------------------------------------
-            // vim keybindings — gg/G plus search (/, n, N), motions, help (?)
+            // vim keybindings
             // ---------------------------------------------------------------
-            const toast = document.createElement("div");
-            toast.style.cssText =
+            const toastEl = document.createElement("div");
+            toastEl.style.cssText =
                 'position:fixed;bottom:2rem;right:2rem;background:#16161b;border:1px solid rgba(123,97,255,0.4);color:#a78bfa;font-family:"JetBrains Mono",monospace;font-size:12px;padding:8px 16px;border-radius:6px;z-index:999;opacity:0;transition:opacity 0.2s;pointer-events:none;';
-            document.body.appendChild(toast);
+            document.body.appendChild(toastEl);
             function showToast(msg) {
-                toast.textContent = msg;
-                toast.style.opacity = "1";
-                clearTimeout(toast._t);
-                toast._t = setTimeout(() => (toast.style.opacity = "0"), 800);
+                toastEl.textContent = msg;
+                toastEl.style.opacity = "1";
+                clearTimeout(toastEl._t);
+                toastEl._t = setTimeout(
+                    () => (toastEl.style.opacity = "0"),
+                    800,
+                );
             }
 
             const searchBar = document.getElementById("vim-search-bar");
@@ -1388,8 +1435,6 @@
             const searchCount = document.getElementById("vim-search-count");
             const helpOverlay = document.getElementById("vim-help-overlay");
 
-            // text nodes eligible for highlighting — scoped to <main> only,
-            // so nav/header and footer are never searched (skip script/style/inputs)
             function getTextNodes() {
                 const root = document.querySelector("main") || document.body;
                 const walker = document.createTreeWalker(
@@ -1420,7 +1465,7 @@
                 return nodes;
             }
 
-            let matches = []; // array of <mark> elements
+            let matches = [];
             let matchIndex = -1;
 
             function clearMatches() {
@@ -1538,7 +1583,6 @@
                     e.target.tagName === "INPUT" ||
                     e.target.tagName === "TEXTAREA";
 
-                // Escape always works, even inside the search field
                 if (e.key === "Escape") {
                     if (helpOverlay.classList.contains("open")) closeHelp();
                     else if (searchBar.classList.contains("open"))
@@ -1547,7 +1591,7 @@
                     return;
                 }
 
-                if (inField) return; // let the search input handle its own keys
+                if (inField) return;
 
                 const now = Date.now();
 
