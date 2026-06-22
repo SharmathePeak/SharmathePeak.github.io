@@ -389,6 +389,25 @@
             .term-out.highlight {
                 color: var(--text);
             }
+            .term-input-line {
+                position: relative;
+                align-items: center;
+            }
+            .term-input-display {
+                color: var(--accent2);
+                white-space: pre;
+            }
+            .term-input {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 1px;
+                height: 1px;
+                opacity: 0;
+                border: none;
+                outline: none;
+                padding: 0;
+            }
             .cursor-blink {
                 display: inline-block;
                 width: 8px;
@@ -916,7 +935,7 @@
         </main>
         <footer>
             <div class="container">
-                built by Vishnu · designed with
+                built by Sharma · designed with
                 <a
                     href="https://claude.ai"
                     target="_blank"
@@ -1085,11 +1104,13 @@
                     text: '  <span style="color:#22c55e">Python</span> \u2192 <span style="color:#22c55e">C++</span> \u2192 <span style="color:#eab308">C</span> \u2192 <span style="color:#eab308">Zig</span> \u2192 <span style="color:#6b6b7e">Rust</span> \u2192 <span style="color:#6b6b7e">Assembly</span>',
                 },
                 { type: "out", text: "" },
-                { type: "prompt", cmd: "", cursor: true },
             ];
             let i = 0;
             function addLine() {
-                if (i >= lines.length) return;
+                if (i >= lines.length) {
+                    spawnPrompt();
+                    return;
+                }
                 const l = lines[i++];
                 const div = document.createElement("div");
                 if (l.type === "prompt") {
@@ -1125,6 +1146,228 @@
                 { threshold: 0.3 },
             );
             termObs.observe(aboutSec);
+
+            // ---------------------------------------------------------------
+            // hidden terminal — unlocks only on desktop, only after the
+            // Konami code (↑ ↑ ↓ ↓ ← → ← → B A) is typed anywhere on the page
+            // ---------------------------------------------------------------
+            const isTouchDevice =
+                window.matchMedia("(pointer: coarse)").matches &&
+                !window.matchMedia("(any-pointer: fine)").matches;
+
+            if (isTouchDevice) {
+                console.log(
+                    "[konami] disabled — device reports coarse-only pointer (touch, no mouse/trackpad)",
+                );
+            }
+
+            const terminalEl = document.querySelector(".terminal");
+
+            function printLine(html, opts = {}) {
+                const div = document.createElement("div");
+                div.className = "term-line";
+                if (opts.prompt) {
+                    div.innerHTML =
+                        '<span class="term-prompt">~$</span><span class="term-cmd"> ' +
+                        html +
+                        "</span>";
+                } else {
+                    div.innerHTML =
+                        '<span class="term-out' +
+                        (opts.hl ? " highlight" : "") +
+                        '">' +
+                        (html || "&nbsp;") +
+                        "</span>";
+                }
+                termBody.appendChild(div);
+                termBody.scrollTop = termBody.scrollHeight;
+            }
+
+            const SECRET_DOC = `
+  [ Quantum Entanglement ]
+
+  Two particles, once correlated, share a single wavefunction
+  no matter how far apart they end up. Measuring one collapses
+  the joint state, and the other "knows" instantly — but no
+  usable signal travels faster than light, so causality survives.
+
+  State (Bell pair):
+    |\u03A8\u207B\u232A = (1/\u221A2)( |0\u232A|1\u232A \u2212 |1\u232A|0\u232A )
+
+  Measuring qubit A in the computational basis forces qubit B
+  into the opposite state, with correlation strength that beats
+  any classical hidden-variable model — bounded classically by:
+
+    |E(a,b) \u2212 E(a,c)| \u2264 1 + E(b,c)      (Bell / CHSH inequality)
+
+  Quantum mechanics violates this bound, reaching:
+
+    S = 2\u221A2 \u2248 2.828   (Tsirelson's bound, vs classical limit of 2)
+
+  Hypothesis (ER = EPR, Maldacena & Susskind, 2013):
+    entangled particles may be connected by a microscopic,
+    non-traversable wormhole (Einstein-Rosen bridge) — i.e.
+    entanglement (EPR) and wormholes (ER) could be the same
+    physical phenomenon viewed two different ways.
+
+  [ Spacetime ]
+
+  Mass and energy don't sit *in* spacetime, they bend it.
+  Gravity isn't a force in the Newtonian sense — it's geometry.
+
+  Einstein field equations:
+    G_\u03BC\u03BD + \u039Bg_\u03BC\u03BD = (8\u03C0G / c\u2074) T_\u03BC\u03BD
+
+  where G_\u03BC\u03BD is spacetime curvature, T_\u03BC\u03BD is the
+  stress-energy of matter/energy, and \u039B is the cosmological
+  constant — the term responsible for accelerating expansion.
+
+  Proper time interval (Minkowski metric, flat spacetime):
+    d\u03C4\u00B2 = dt\u00B2 \u2212 (1/c\u00B2)(dx\u00B2 + dy\u00B2 + dz\u00B2)
+
+  Hypothesis (ADS/CFT correspondence, Maldacena, 1997):
+    a gravitational theory in a curved (d+1)-dimensional bulk
+    spacetime is mathematically equivalent to a quantum field
+    theory living on its (d)-dimensional flat boundary — i.e.
+    gravity itself might be an emergent, holographic illusion.
+
+  [ EOF ]
+`.trim();
+
+            const ABOUT_TXT = [
+                "",
+                "  name    :  Vishnu Sharma",
+                "  status  :  Studying @ BITS Hyderabad",
+                "  focus   :  Systems programming, low-level C/C++",
+                "  hobbies :  Linux ricing, drawing, game dev",
+                "  vibes   :  Good Night Eri, Steins;Gate, Chainsaw Man",
+                "  author  :  Tatsuki Fujimoto",
+                "",
+            ];
+            const LEARNING_PATH_LINE =
+                '  <span style="color:#22c55e">Python</span> \u2192 <span style="color:#22c55e">C++</span> \u2192 <span style="color:#eab308">C</span> \u2192 <span style="color:#eab308">Zig</span> \u2192 <span style="color:#6b6b7e">Rust</span> \u2192 <span style="color:#6b6b7e">Assembly</span>';
+
+            function runCommand(raw) {
+                const cmd = raw.trim();
+                printLine(cmd, { prompt: true });
+                if (!cmd) return;
+
+                if (cmd === "sudo rm -rf /") {
+                    printLine("Permission denied: nice try.", { hl: true });
+                } else if (cmd === "ls") {
+                    printLine("about.txt  secret_documents.txt");
+                } else if (cmd === "whoami") {
+                    printLine("sharma");
+                } else if (cmd === "help") {
+                    printLine("available commands:", { hl: true });
+                    printLine("  ls");
+                    printLine("  cat &lt;file&gt;");
+                    printLine("  echo &lt;text&gt;");
+                    printLine("  whoami");
+                } else if (cmd === "cat about.txt") {
+                    ABOUT_TXT.forEach((line, idx) =>
+                        printLine(line, {
+                            hl: idx === 1 || idx === 6,
+                        }),
+                    );
+                } else if (cmd === "cat secret_documents.txt") {
+                    SECRET_DOC.split("\n").forEach((line) => printLine(line));
+                } else if (cmd === "echo $LEARNING_PATH") {
+                    printLine(LEARNING_PATH_LINE);
+                } else if (cmd === "clear") {
+                    termBody.innerHTML = "";
+                } else if (cmd === "echo" || cmd.startsWith("echo ")) {
+                    const text = cmd.slice(4).trim();
+                    const escaped = text
+                        .replace(/&/g, "&amp;")
+                        .replace(/</g, "&lt;")
+                        .replace(/>/g, "&gt;");
+                    printLine(escaped);
+                } else {
+                    printLine("command not found: " + cmd.split(" ")[0]);
+                }
+            }
+
+            // builds one live prompt row: ~$ <typed text><thick blinking cursor>
+            // the real <input> is invisible and only exists to capture keys —
+            // what's actually seen is the span + the same .cursor-blink block
+            // used by the boot sequence, so it reads as the same terminal.
+            // Before the Konami code is entered the row is purely decorative:
+            // it shows the idle cursor but the input never gains focus and
+            // ignores keystrokes, so nothing happens until unlocked.
+            function spawnPrompt() {
+                const row = document.createElement("div");
+                row.className = "term-line term-input-line";
+                row.innerHTML =
+                    '<span class="term-prompt">~$</span>' +
+                    '<span class="term-input-display"></span>' +
+                    '<span class="cursor-blink"></span>' +
+                    '<input class="term-input" type="text" autocomplete="off" spellcheck="false" tabindex="-1" />';
+                termBody.appendChild(row);
+                const display = row.querySelector(".term-input-display");
+                const input = row.querySelector(".term-input");
+
+                input.addEventListener("input", () => {
+                    if (!terminalEl.classList.contains("unlocked")) {
+                        input.value = "";
+                        return;
+                    }
+                    display.textContent = input.value;
+                });
+                input.addEventListener("keydown", (e) => {
+                    if (!terminalEl.classList.contains("unlocked")) return;
+                    e.stopPropagation();
+                    if (e.key === "Enter") {
+                        const val = input.value;
+                        row.remove();
+                        runCommand(val);
+                        spawnPrompt();
+                    }
+                });
+                if (terminalEl.classList.contains("unlocked")) {
+                    input.removeAttribute("tabindex");
+                    input.focus();
+                }
+                termBody.scrollTop = termBody.scrollHeight;
+            }
+
+            if (!isTouchDevice) {
+                const KONAMI = [
+                    "ArrowUp",
+                    "ArrowUp",
+                    "ArrowDown",
+                    "ArrowDown",
+                    "ArrowLeft",
+                    "ArrowRight",
+                    "ArrowLeft",
+                    "ArrowRight",
+                    "b",
+                    "a",
+                ];
+                let konamiProgress = 0;
+
+                document.addEventListener("keydown", (e) => {
+                    if (terminalEl.classList.contains("unlocked")) return;
+                    const expected = KONAMI[konamiProgress];
+                    const got =
+                        expected === "b" || expected === "a"
+                            ? e.key.toLowerCase()
+                            : e.key;
+                    if (got === expected) {
+                        konamiProgress++;
+                        if (konamiProgress === KONAMI.length) {
+                            terminalEl.classList.add("unlocked");
+                            showToast("konami!");
+                            const idleRow =
+                                termBody.querySelector(".term-input-line");
+                            if (idleRow) idleRow.remove();
+                            spawnPrompt();
+                        }
+                    } else {
+                        konamiProgress = got === KONAMI[0] ? 1 : 0;
+                    }
+                });
+            }
 
             // ---------------------------------------------------------------
             // vim keybindings — gg/G plus search (/, n, N), motions, help (?)
