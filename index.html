@@ -1163,7 +1163,7 @@
 
             const BOOT_LINES = [
                 { type: "out", text: "" },
-                { type: "out", text: "  sharma-os v1.048596 — booting…", hl: true },
+                { type: "out", text: "  sharma-os v1.048596", hl: true },
                 { type: "out", text: "" },
             ];
 
@@ -1236,20 +1236,10 @@
                 // step 1: boot lines
                 await new Promise((res) => renderLines(BOOT_LINES, res));
 
-                // step 2: three loading bars
-                await animateBootBar("  loading kernel   ", 600);
-                await animateBootBar("  mounting fs      ", 500);
-                await animateBootBar("  init services    ", 700);
-
-                // step 3: ready line
-                printLine("", {});
-                printLine("  system ready.", { hl: true });
-                printLine("", {});
-
-                // step 4: about info lines
+                // step 2: about info lines
                 await new Promise((res) => renderLines(INFO_LINES, res));
 
-                // step 5: spawn the live prompt (do not auto-focus)
+                // step 3: spawn the live prompt (do not auto-focus)
                 spawnPrompt(false);
             }
 
@@ -1350,8 +1340,8 @@
                     const file = cmd.slice(4).trim();
                     printLine(
                         file
-                            ? `cat: ${file}: file not found`
-                            : "cat: file not found",
+                            ? `cat ${file}: file not found`
+                            : "cat file not found",
                     );
                 } else if (cmd === "echo $LEARNING_PATH") {
                     printLine(LEARNING_PATH_LINE);
