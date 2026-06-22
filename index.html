@@ -1,58 +1,344 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Vishnu Sarma</title>
-  <link rel="stylesheet" href="style.css" />
-</head>
-<body>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Vikram Aditya</title>
+        <link rel="stylesheet" href="style.css" />
+    </head>
+    <body>
+        <div id="cursor-glow"></div>
+        <div id="progress"></div>
 
-  <div class="container">
-    <h1>Vishnu Sarma</h1>
-    <p class="subtitle" id="typing"></p>
+        <nav>
+            <div class="inner">
+                <span class="nav-logo">vikram.dev</span>
+                <div class="nav-links">
+                    <a href="#about">about</a>
+                    <a href="#projects">projects</a>
+                    <a href="#contact">contact</a>
+                </div>
+            </div>
+        </nav>
 
-    <section>
-      <h2>About Me</h2>
-      <p>
-        My name is Vishnu Sarma. I am currently studying in Narayana College,
-        12th class, aiming to crack JEE and get into IIT.
-        Born in 2008.  
-        <br><br>
-        My goal is to achieve greatness above all.
-      </p>
-    </section>
+        <main class="container">
+            <!-- HERO -->
+            <div class="hero fade-in">
+                <div class="hero-eyebrow">self-taught · systems programmer</div>
+                <h1>Vikram<br /><span>Aditya.</span></h1>
+                <p class="hero-sub">
+                    I build things from scratch to understand how they actually
+                    work — from neural nets and interpreters to terminal apps
+                    and 2D games.
+                </p>
+                <div class="hero-links">
+                    <a
+                        class="pill"
+                        href="https://github.com/SharmathePeak"
+                        target="_blank"
+                    >
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path
+                                d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"
+                            />
+                        </svg>
+                        SharmathePeak
+                    </a>
+                    <a
+                        class="pill"
+                        href="https://instagram.com/blatantlywrong"
+                        target="_blank"
+                    >
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path
+                                d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"
+                            />
+                        </svg>
+                        @blatantlywrong
+                    </a>
+                    <a class="pill" href="mailto:vikramaditya.toman@gmail.com">
+                        <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.8"
+                        >
+                            <rect x="2" y="4" width="20" height="16" rx="2" />
+                            <path
+                                d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"
+                            />
+                        </svg>
+                        email me
+                    </a>
+                </div>
+            </div>
 
-    <section>
-      <h2>Projects</h2>
-      <p>
-        I created a neural network from scratch which takes input as a single array.
-      </p>
-      <a class="link" href="https://github.com/SharmathePeak/" target="_blank">
-        🔗 View My GitHub Projects
-      </a>
-    </section>
+            <!-- ABOUT -->
+            <section id="about" class="fade-in">
+                <div class="s-label">about</div>
+                <div class="terminal">
+                    <div class="term-bar">
+                        <span class="dot dot-r"></span>
+                        <span class="dot dot-y"></span>
+                        <span class="dot dot-g"></span>
+                    </div>
+                    <div class="term-body" id="term-body">
+                        <div class="term-line">
+                            <span class="term-prompt">~$</span
+                            ><span class="term-cmd">cat about.txt</span>
+                        </div>
+                    </div>
+                </div>
+                <p class="about-text">
+                    I'm <strong>Vikram Aditya</strong>, a self-taught systems
+                    programmer currently studying at BITS Hyderabad. I've been
+                    coding since before college, teaching myself C, C++, Python,
+                    and low-level systems work from scratch — because I actually
+                    want to know what's happening under the hood.
+                </p>
+                <p class="about-text" style="margin-top: 1rem">
+                    My projects lean toward the foundational: neural nets
+                    without libraries, a Brainfuck interpreter, terminal apps,
+                    2D games in pure C++. I'm also into
+                    <strong>Linux ricing</strong> on Arch with Hyprland,
+                    drawing, and learning the path from C all the way to
+                    Assembly.
+                </p>
+                <div class="stack-row">
+                    <span class="tag">C</span>
+                    <span class="tag">C++</span>
+                    <span class="tag">Python</span>
+                    <span class="tag">OpenGL</span>
+                    <span class="tag">ncurses</span>
+                    <span class="tag">Arch Linux</span>
+                    <span class="tag">Hyprland</span>
+                    <span class="tag">Drawing</span>
+                    <span class="tag">Git</span>
+                    <span class="tag">Bash</span>
+                </div>
+            </section>
 
-    <section>
-      <h2>Contact</h2>
-      <p>Email:</p>
-      <a class="link" href="mailto:sharmaexists@gmail.com">
-        📧 sharmaexists@gmail.com
-      </a>
-    </section>
+            <!-- PROJECTS -->
+            <section id="projects" class="fade-in">
+                <div class="s-label">projects</div>
+                <div class="proj-grid">
+                    <a
+                        class="proj-card"
+                        href="https://github.com/SharmathePeak/ternote"
+                        target="_blank"
+                    >
+                        <div class="proj-top">
+                            <span class="proj-name">ternote</span>
+                            <span class="lang-dot"
+                                ><span class="cpp"></span>C++</span
+                            >
+                        </div>
+                        <p class="proj-desc">
+                            Terminal notes app with ncurses-style design,
+                            single-file storage, in-memory vector ops, and a
+                            clean install script. Shipped v0.1.
+                        </p>
+                        <a
+                            class="proj-link"
+                            href="https://github.com/SharmathePeak/ternote"
+                            target="_blank"
+                        >
+                            github.com/SharmathePeak/ternote
+                            <svg
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                            >
+                                <path d="M7 17L17 7M7 7h10v10" />
+                            </svg>
+                        </a>
+                    </a>
 
-    <section>
-      <h2>Social</h2>
-      <a class="link" href="https://instagram.com/sharmathepeak" target="_blank">
-        📸 Instagram: @sharmathepeak
-      </a>
-    </section>
+                    <a
+                        class="proj-card"
+                        href="https://github.com/SharmathePeak/SingleArrayNeuralNetworkWithBackProp"
+                        target="_blank"
+                    >
+                        <div class="proj-top">
+                            <span class="proj-name">neural network</span>
+                            <span class="lang-dot"
+                                ><span class="py"></span>Python</span
+                            >
+                        </div>
+                        <p class="proj-desc">
+                            Backprop framework from scratch using a single flat
+                            array. Forward pass, loss, gradient descent — zero
+                            ML libraries.
+                        </p>
+                        <a
+                            class="proj-link"
+                            href="https://github.com/SharmathePeak/SingleArrayNeuralNetworkWithBackProp"
+                            target="_blank"
+                        >
+                            SingleArrayNeuralNetwork…
+                            <svg
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                            >
+                                <path d="M7 17L17 7M7 7h10v10" />
+                            </svg>
+                        </a>
+                    </a>
 
-    <footer>
-      <p>© <span id="year"></span> Vishnu Sharma</p>
-    </footer>
-  </div>
+                    <a
+                        class="proj-card"
+                        href="https://github.com/SharmathePeak/BrainfkInterpreter"
+                        target="_blank"
+                    >
+                        <div class="proj-top">
+                            <span class="proj-name">BF interpreter</span>
+                            <span class="lang-dot"
+                                ><span class="cpp"></span>C++</span
+                            >
+                        </div>
+                        <p class="proj-desc">
+                            Complete Brainfuck interpreter — parser, memory
+                            tape, control flow, all from scratch. Classic
+                            systems exercise.
+                        </p>
+                        <a
+                            class="proj-link"
+                            href="https://github.com/SharmathePeak/BrainfkInterpreter"
+                            target="_blank"
+                        >
+                            BrainfkInterpreter
+                            <svg
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                            >
+                                <path d="M7 17L17 7M7 7h10v10" />
+                            </svg>
+                        </a>
+                    </a>
 
-  <script src="script.js"></script>
-</body>
+                    <a
+                        class="proj-card"
+                        href="https://github.com/SharmathePeak/TBSWM"
+                        target="_blank"
+                    >
+                        <div class="proj-top">
+                            <span class="proj-name">TBSWM</span>
+                            <span class="lang-dot"
+                                ><span class="cpp"></span>C++</span
+                            >
+                        </div>
+                        <p class="proj-desc">
+                            Text-based 2-player combat: Warrior vs Mage.
+                            Turn-based CLI with typed move states, class
+                            abilities, and status effects.
+                        </p>
+                        <a
+                            class="proj-link"
+                            href="https://github.com/SharmathePeak/TBSWM"
+                            target="_blank"
+                        >
+                            github.com/SharmathePeak/TBSWM
+                            <svg
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                            >
+                                <path d="M7 17L17 7M7 7h10v10" />
+                            </svg>
+                        </a>
+                    </a>
+
+                    <a
+                        class="proj-card"
+                        href="https://github.com/SharmathePeak/CubeJump_Sharma"
+                        target="_blank"
+                    >
+                        <div class="proj-top">
+                            <span class="proj-name">CubeJump</span>
+                            <span class="lang-dot"
+                                ><span class="cpp"></span>C++</span
+                            >
+                        </div>
+                        <p class="proj-desc">
+                            First 2D game in pure C++ — no engine. Manual
+                            physics, collision detection, and rendering loop
+                            built from first principles.
+                        </p>
+                        <a
+                            class="proj-link"
+                            href="https://github.com/SharmathePeak/CubeJump_Sharma"
+                            target="_blank"
+                        >
+                            CubeJump_Sharma
+                            <svg
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                            >
+                                <path d="M7 17L17 7M7 7h10v10" />
+                            </svg>
+                        </a>
+                    </a>
+                </div>
+            </section>
+
+            <!-- CONTACT -->
+            <section id="contact" class="fade-in">
+                <div class="s-label">contact</div>
+                <div class="contact-grid">
+                    <a
+                        class="contact-card"
+                        href="mailto:vikramaditya.toman@gmail.com"
+                    >
+                        <div class="contact-icon">✉️</div>
+                        <div class="contact-label">Email</div>
+                        <div class="contact-val">
+                            vikramaditya.toman@gmail.com
+                        </div>
+                    </a>
+                    <a
+                        class="contact-card"
+                        href="https://github.com/SharmathePeak"
+                        target="_blank"
+                    >
+                        <div class="contact-icon">⚙️</div>
+                        <div class="contact-label">GitHub</div>
+                        <div class="contact-val">github.com/SharmathePeak</div>
+                    </a>
+                    <a
+                        class="contact-card"
+                        href="https://instagram.com/blatantlywrong"
+                        target="_blank"
+                    >
+                        <div class="contact-icon">📸</div>
+                        <div class="contact-label">Instagram</div>
+                        <div class="contact-val">@blatantlywrong</div>
+                    </a>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <div class="container">
+                built by vikram · designed with
+                <a
+                    href="https://claude.ai"
+                    target="_blank"
+                    style="color: var(--accent2); text-decoration: none"
+                    >Claude</a
+                >
+                · <span id="yr"></span>
+            </div>
+        </footer>
+
+        <script src="script.js"></script>
+    </body>
 </html>
+
