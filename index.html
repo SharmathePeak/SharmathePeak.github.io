@@ -308,6 +308,9 @@
             .py {
                 background: #3572a5;
             }
+            .c {
+                background: #555555;
+            }
             .proj-desc {
                 font-size: 13px;
                 color: var(--muted);
@@ -421,8 +424,6 @@
                     opacity: 0;
                 }
             }
-
-            /* ---- boot loading animation ---- */
             .term-boot-bar {
                 color: var(--muted);
                 font-family: var(--mono);
@@ -439,7 +440,6 @@
                 color: var(--border-hover);
                 letter-spacing: -1px;
             }
-
             .contact-grid {
                 display: grid;
                 grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
@@ -517,11 +517,9 @@
                     grid-template-columns: 1fr;
                 }
                 .terminal {
-                    pointer-events: none; /* Makes the terminal inaccessible to interactions on mobile */
+                    pointer-events: none;
                 }
             }
-
-            /* ---------- vim layer: search bar ---------- */
             #vim-search-bar {
                 position: fixed;
                 bottom: 0;
@@ -571,8 +569,6 @@
                 background: var(--accent2);
                 color: #0d0d0f;
             }
-
-            /* ---------- vim layer: cheatsheet (?) ---------- */
             #vim-help-overlay {
                 position: fixed;
                 inset: 0;
@@ -850,26 +846,26 @@
                     </a>
                     <a
                         class="proj-card"
-                        href="https://github.com/SharmathePeak/TBSWM"
+                        href="https://github.com/SharmathePeak/sstring.h"
                         target="_blank"
                     >
                         <div class="proj-top">
-                            <span class="proj-name">TBSWM</span>
+                            <span class="proj-name">sstring.h</span>
                             <span class="lang-dot"
-                                ><span class="cpp"></span>C++</span
+                                ><span class="c"></span>C</span
                             >
                         </div>
                         <p class="proj-desc">
-                            Text-based 2-player combat: Warrior vs Mage.
-                            Turn-based CLI with typed move states, class
-                            abilities, and status effects.
+                            String library built from scratch in C — no string.h.
+                            Manual memory, realloc-based input, reverse, find,
+                            append. Written in 4 hours.
                         </p>
                         <a
                             class="proj-link"
-                            href="https://github.com/SharmathePeak/TBSWM"
+                            href="https://github.com/SharmathePeak/sstring.h"
                             target="_blank"
                         >
-                            github.com/SharmathePeak/TBSWM
+                            sstring.h
                             <svg
                                 viewBox="0 0 24 24"
                                 fill="none"
@@ -958,7 +954,6 @@
                 · <span id="yr"></span>
             </div>
         </footer>
-
         <div id="vim-search-bar">
             <span class="vs-prefix">/</span>
             <input
@@ -970,7 +965,6 @@
             />
             <span class="vs-count" id="vim-search-count"></span>
         </div>
-
         <div id="vim-help-overlay">
             <div class="vim-help-card">
                 <div class="vim-help-title">
@@ -1042,7 +1036,6 @@
                 </div>
             </div>
         </div>
-
         <script>
             document.getElementById("yr").textContent =
                 new Date().getFullYear();
@@ -1086,18 +1079,10 @@
                     );
                 });
             });
-
-            // ---------------------------------------------------------------
-            // terminal boot sequence + always-on interactive prompt
-            // ---------------------------------------------------------------
             const termBody = document.getElementById("term-body");
             const terminalEl = document.querySelector(".terminal");
-
-            // Terminal history tracking
             const commandHistory = [];
             let historyIndex = 0;
-
-            // helper: append a line to the terminal
             function printLine(html, opts = {}) {
                 const div = document.createElement("div");
                 div.className = "term-line";
@@ -1118,8 +1103,6 @@
                 termBody.scrollTop = termBody.scrollHeight;
                 return div;
             }
-
-            // animated progress bar — returns a promise that resolves when done
             function animateBootBar(label, durationMs) {
                 return new Promise((resolve) => {
                     const TOTAL = 28;
@@ -1134,13 +1117,11 @@
                         "</span>";
                     termBody.appendChild(wrapper);
                     termBody.scrollTop = termBody.scrollHeight;
-
                     const fillEl = wrapper.querySelector(".bar-fill");
                     const emptyEl = wrapper.querySelector(".bar-empty");
                     const pctEl = wrapper.querySelector(".pct");
                     const interval = durationMs / TOTAL;
                     let filled = 0;
-
                     const tick = setInterval(() => {
                         filled++;
                         fillEl.textContent = "█".repeat(filled);
@@ -1154,13 +1135,11 @@
                     }, interval);
                 });
             }
-
             const BOOT_LINES = [
                 { type: "out", text: "" },
                 { type: "out", text: "  sharma-os v1.048596", hl: true },
                 { type: "out", text: "" },
             ];
-
             const INFO_LINES = [
                 { type: "prompt", cmd: "cat about.txt" },
                 { type: "out", text: "" },
@@ -1191,7 +1170,6 @@
                 },
                 { type: "out", text: "" },
             ];
-
             function renderLines(lines, callback) {
                 let i = 0;
                 function next() {
@@ -1225,72 +1203,47 @@
                 }
                 next();
             }
-
             async function runBootSequence() {
-                // step 1: boot lines
                 await new Promise((res) => renderLines(BOOT_LINES, res));
-
-                // step 2: about info lines
                 await new Promise((res) => renderLines(INFO_LINES, res));
-
-                // step 3: spawn the live prompt (do not auto-focus)
                 spawnPrompt(false);
             }
-
-            // ---------------------------------------------------------------
-            // command definitions
-            // ---------------------------------------------------------------
             const SECRET_DOC = `
   [ Quantum Entanglement ]
-
   Two particles, once correlated, share a single wavefunction
   no matter how far apart they end up. Measuring one collapses
   the joint state, and the other "knows" instantly — but no
   usable signal travels faster than light, so causality survives.
-
   State (Bell pair):
     |\u03A8\u207B\u232A = (1/\u221A2)( |0\u232A|1\u232A \u2212 |1\u232A|0\u232A )
-
   Measuring qubit A in the computational basis forces qubit B
   into the opposite state, with correlation strength that beats
   any classical hidden-variable model — bounded classically by:
-
     |E(a,b) \u2212 E(a,c)| \u2264 1 + E(b,c)      (Bell / CHSH inequality)
-
   Quantum mechanics violates this bound, reaching:
-
     S = 2\u221A2 \u2248 2.828   (Tsirelson's bound, vs classical limit of 2)
-
   Hypothesis (ER = EPR, Maldacena & Susskind, 2013):
     entangled particles may be connected by a microscopic,
     non-traversable wormhole (Einstein-Rosen bridge) — i.e.
     entanglement (EPR) and wormholes (ER) could be the same
     physical phenomenon viewed two different ways.
-
   [ Spacetime ]
-
   Mass and energy don't sit *in* spacetime, they bend it.
   Gravity isn't a force in the Newtonian sense — it's geometry.
-
   Einstein field equations:
     G_\u03BC\u03BD + \u039Bg_\u03BC\u03BD = (8\u03C0G / c\u2074) T_\u03BC\u03BD
-
   where G_\u03BC\u03BD is spacetime curvature, T_\u03BC\u03BD is the
   stress-energy of matter/energy, and \u039B is the cosmological
   constant — the term responsible for accelerating expansion.
-
   Proper time interval (Minkowski metric, flat spacetime):
     d\u03C4\u00B2 = dt\u00B2 \u2212 (1/c\u00B2)(dx\u00B2 + dy\u00B2 + dz\u00B2)
-
   Hypothesis (ADS/CFT correspondence, Maldacena, 1997):
     a gravitational theory in a curved (d+1)-dimensional bulk
     spacetime is mathematically equivalent to a quantum field
     theory living on its (d)-dimensional flat boundary — i.e.
     gravity itself might be an emergent, holographic illusion.
-
   [ EOF ]
 `.trim();
-
             const ABOUT_TXT = [
                 "",
                 "  name    :  Vishnu Sharma",
@@ -1303,12 +1256,10 @@
             ];
             const LEARNING_PATH_LINE =
                 '  <span style="color:#22c55e">Python</span> \u2192 <span style="color:#22c55e">C++</span> \u2192 <span style="color:#eab308">C</span> \u2192 <span style="color:#eab308">Zig</span> \u2192 <span style="color:#6b6b7e">Rust</span> \u2192 <span style="color:#6b6b7e">Assembly</span>';
-
             function runCommand(raw) {
                 const cmd = raw.trim();
                 printLine(cmd, { prompt: true });
                 if (!cmd) return;
-
                 if (cmd === "sudo rm -rf /") {
                     printLine("Permission denied: nice try.", { hl: true });
                 } else if (cmd === "ls") {
@@ -1355,8 +1306,6 @@
                     printLine("command not found: " + cmd.split(" ")[0]);
                 }
             }
-
-            // live prompt row — only focuses when explicitly told to do so
             function spawnPrompt(shouldFocus = false) {
                 const row = document.createElement("div");
                 row.className = "term-line term-input-line";
@@ -1368,7 +1317,6 @@
                 termBody.appendChild(row);
                 const display = row.querySelector(".term-input-display");
                 const input = row.querySelector(".term-input");
-
                 input.addEventListener("input", () => {
                     display.textContent = input.value;
                 });
@@ -1382,7 +1330,6 @@
                         historyIndex = commandHistory.length;
                         row.remove();
                         runCommand(val);
-                        // keep focus since they are actively working inside the prompt
                         spawnPrompt(true);
                     } else if (e.key === "ArrowUp") {
                         e.preventDefault();
@@ -1405,15 +1352,11 @@
                 }
                 termBody.scrollTop = termBody.scrollHeight;
             }
-
-            // click anywhere on the terminal body to focus the input
             terminalEl.addEventListener("click", () => {
-                if (window.innerWidth <= 600) return; // Prevent focus on mobile breakpoints
+                if (window.innerWidth <= 600) return;
                 const inp = termBody.querySelector(".term-input");
                 if (inp) inp.focus();
             });
-
-            // trigger boot sequence when the about section scrolls into view
             const aboutSec = document.getElementById("about");
             const termObs = new IntersectionObserver(
                 (entries) => {
@@ -1425,10 +1368,6 @@
                 { threshold: 0.3 },
             );
             termObs.observe(aboutSec);
-
-            // ---------------------------------------------------------------
-            // vim keybindings
-            // ---------------------------------------------------------------
             const toastEl = document.createElement("div");
             toastEl.style.cssText =
                 'position:fixed;bottom:2rem;right:2rem;background:#16161b;border:1px solid rgba(123,97,255,0.4);color:#a78bfa;font-family:"JetBrains Mono",monospace;font-size:12px;padding:8px 16px;border-radius:6px;z-index:999;opacity:0;transition:opacity 0.2s;pointer-events:none;';
@@ -1442,12 +1381,10 @@
                     800,
                 );
             }
-
             const searchBar = document.getElementById("vim-search-bar");
             const searchInput = document.getElementById("vim-search-input");
             const searchCount = document.getElementById("vim-search-count");
             const helpOverlay = document.getElementById("vim-help-overlay");
-
             function getTextNodes() {
                 const root = document.querySelector("main") || document.body;
                 const walker = document.createTreeWalker(
@@ -1477,10 +1414,8 @@
                 while ((n = walker.nextNode())) nodes.push(n);
                 return nodes;
             }
-
             let matches = [];
             let matchIndex = -1;
-
             function clearMatches() {
                 document.querySelectorAll("mark.vim-match").forEach((m) => {
                     const parent = m.parentNode;
@@ -1494,7 +1429,6 @@
                 matchIndex = -1;
                 searchCount.textContent = "";
             }
-
             function runSearch(term) {
                 clearMatches();
                 if (!term) return;
@@ -1533,7 +1467,6 @@
                     searchCount.textContent = "0/0";
                 }
             }
-
             function focusMatch() {
                 matches.forEach((m) => m.classList.remove("current"));
                 if (!matches.length) return;
@@ -1542,26 +1475,22 @@
                 m.scrollIntoView({ behavior: "smooth", block: "center" });
                 searchCount.textContent = matchIndex + 1 + "/" + matches.length;
             }
-
             function nextMatch(dir) {
                 if (!matches.length) return;
                 matchIndex =
                     (matchIndex + dir + matches.length) % matches.length;
                 focusMatch();
             }
-
             function openSearch() {
                 searchBar.classList.add("open");
                 searchInput.value = "";
                 searchInput.focus();
             }
-
             function closeSearch() {
                 searchBar.classList.remove("open");
                 searchInput.blur();
                 clearMatches();
             }
-
             searchInput.addEventListener("keydown", (e) => {
                 if (e.key === "Enter") {
                     e.preventDefault();
@@ -1576,7 +1505,6 @@
                     closeSearch();
                 }
             });
-
             function openHelp() {
                 helpOverlay.classList.add("open");
             }
@@ -1586,16 +1514,13 @@
             helpOverlay.addEventListener("click", (e) => {
                 if (e.target === helpOverlay) closeHelp();
             });
-
             const SECTION_IDS = ["about", "projects", "contact"];
-
             let lastKey = "";
             let lastKeyTime = 0;
             document.addEventListener("keydown", (e) => {
                 const inField =
                     e.target.tagName === "INPUT" ||
                     e.target.tagName === "TEXTAREA";
-
                 if (e.key === "Escape") {
                     if (helpOverlay.classList.contains("open")) closeHelp();
                     else if (searchBar.classList.contains("open"))
@@ -1603,11 +1528,8 @@
                     lastKey = "";
                     return;
                 }
-
                 if (inField) return;
-
                 const now = Date.now();
-
                 if (e.key === "?") {
                     e.preventDefault();
                     const opening = !helpOverlay.classList.contains("open");
@@ -1616,7 +1538,6 @@
                     lastKey = "";
                     return;
                 }
-
                 if (e.key === "/") {
                     e.preventDefault();
                     openSearch();
@@ -1624,7 +1545,6 @@
                     lastKey = "";
                     return;
                 }
-
                 if (e.key === "n" || e.key === "N") {
                     if (matches.length) {
                         e.preventDefault();
@@ -1634,7 +1554,6 @@
                     lastKey = "";
                     return;
                 }
-
                 if (e.key === "j" || e.key === "k") {
                     e.preventDefault();
                     window.scrollBy({
@@ -1645,7 +1564,6 @@
                     lastKey = "";
                     return;
                 }
-
                 if ((e.key === "d" || e.key === "u") && e.ctrlKey) {
                     e.preventDefault();
                     const half = window.innerHeight * 0.5;
@@ -1657,7 +1575,6 @@
                     lastKey = "";
                     return;
                 }
-
                 if (/^[123]$/.test(e.key)) {
                     const id = SECTION_IDS[Number(e.key) - 1];
                     const el = document.getElementById(id);
@@ -1672,7 +1589,6 @@
                     lastKey = "";
                     return;
                 }
-
                 if (e.key === "G" && !e.ctrlKey) {
                     window.scrollTo({
                         top: document.body.scrollHeight,
@@ -1698,4 +1614,3 @@
         </script>
     </body>
 </html>
-
