@@ -719,7 +719,7 @@
                 </div>
                 <p class="about-text">
                     I'm <strong>Vishnu Sharma</strong>, a self-taught systems
-                    programmer currently studying at BITS Hyderabad. I've been
+                    programmer and CSE student. I've been
                     coding since before college, teaching myself C, C++, Python,
                     and low-level systems work from scratch — because I actually
                     want to know what's happening under the hood.
@@ -846,7 +846,7 @@
                     </a>
                     <a
                         class="proj-card"
-                        href="https://github.com/SharmathePeak/simple-strings"
+                        href="https://github.com/SharmathePeak/sstring.h"
                         target="_blank"
                     >
                         <div class="proj-top">
@@ -862,7 +862,7 @@
                         </p>
                         <a
                             class="proj-link"
-                            href="https://github.com/SharmathePeak/simple-strings"
+                            href="https://github.com/SharmathePeak/sstring.h"
                             target="_blank"
                         >
                             sstring.h
@@ -944,14 +944,7 @@
         </main>
         <footer>
             <div class="container">
-                built by Sharma · designed with
-                <a
-                    href="https://claude.ai"
-                    target="_blank"
-                    style="color: var(--accent2); text-decoration: none"
-                    >Claude</a
-                >
-                · <span id="yr"></span>
+                built by Sharma · <span id="yr"></span>
             </div>
         </footer>
         <div id="vim-search-bar">
@@ -1144,7 +1137,7 @@
                 { type: "prompt", cmd: "cat about.txt" },
                 { type: "out", text: "" },
                 { type: "out", text: "  name    :  Vishnu Sharma", hl: true },
-                { type: "out", text: "  status  :  Studying @ BITS Hyderabad" },
+                { type: "out", text: "  status  :  CSE student" },
                 {
                     type: "out",
                     text: "  focus   :  Systems programming, low-level C/C++",
@@ -1166,7 +1159,7 @@
                 { type: "prompt", cmd: "echo $LEARNING_PATH" },
                 {
                     type: "out",
-                    text: '  <span style="color:#22c55e">Python</span> \u2192 <span style="color:#22c55e">C++</span> \u2192 <span style="color:#eab308">C</span> \u2192 <span style="color:#eab308">Zig</span> \u2192 <span style="color:#6b6b7e">Rust</span> \u2192 <span style="color:#6b6b7e">Assembly</span>',
+                    text: '  <span style="color:#22c55e">Python</span> \u2192 <span style="color:#22c55e">C++</span> \u2192 <span style="color:#22c55e">C</span> \u2192 <span style="color:#eab308">Assembly</span>',
                 },
                 { type: "out", text: "" },
             ];
@@ -1247,7 +1240,7 @@
             const ABOUT_TXT = [
                 "",
                 "  name    :  Vishnu Sharma",
-                "  status  :  Studying @ BITS Hyderabad",
+                "  status  :  CSE student",
                 "  focus   :  Systems programming, low-level C/C++",
                 "  hobbies :  Linux ricing, drawing, game dev",
                 "  vibes   :  Good Night Eri, Steins;Gate, Chainsaw Man",
@@ -1255,7 +1248,7 @@
                 "",
             ];
             const LEARNING_PATH_LINE =
-                '  <span style="color:#22c55e">Python</span> \u2192 <span style="color:#22c55e">C++</span> \u2192 <span style="color:#eab308">C</span> \u2192 <span style="color:#eab308">Zig</span> \u2192 <span style="color:#6b6b7e">Rust</span> \u2192 <span style="color:#6b6b7e">Assembly</span>';
+                '  <span style="color:#22c55e">Python</span> \u2192 <span style="color:#22c55e">C++</span> \u2192 <span style="color:#22c55e">C</span> \u2192 <span style="color:#eab308">Assembly</span>';
             function runCommand(raw) {
                 const cmd = raw.trim();
                 printLine(cmd, { prompt: true });
@@ -1613,4 +1606,4 @@
             });
         </script>
     </body>
-</html>
+<!-- </html> -->
